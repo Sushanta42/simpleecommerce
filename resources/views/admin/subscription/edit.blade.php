@@ -1,4 +1,4 @@
-<x-vendor-layout>
+<x-admin-layout>
     <section>
         <div class="container">
             @if (Session::has('success') || Session::has('error'))
@@ -17,90 +17,88 @@
             @endif
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <a href="{{ route('product.index') }}" class="btn btn-primary btn-sm">Back</a>
-                    <h4>Edit Product</h4>
+                    <a href="{{ route('subscription.index') }}" class="btn btn-primary btn-sm">Back</a>
+                    <h4>Edit Subscription Plan</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('product.update', $product->id) }}" method="post"
+                    <form action="{{ route('subscription.update', $subscription->id) }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         @method('put')
                         <div class="form-group">
-                            <label for="name">Product Name</label>
+                            <label for="name">Plan Name</label>
                             <input id="name" class="form-control" type="text" name="name"
-                                value="{{ $product->name }}">
+                                value="{{ $subscription->name }}">
                             @error('name')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
                             <label for="description">Description (Optional)</label>
-                            <textarea id="description" class="summernote" name="description" rows="4">{{ $product->description }}</textarea>
+                            <textarea id="description" class="summernote" name="description" rows="4">{{ $subscription->description }}</textarea>
                             @error('description')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="subcategory_id">Sub Category</label>
-                            <select id="subcategory_id" class="form-control" name="subcategory_id">
-                                @foreach ($subcategories as $item)
-                                    <option value="{{ $item->id }}"
-                                        @if ($product->sub_category_id == $item->id) selected @endif>{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label for="price">Price (Rs)</label>
                             <input id="price" class="form-control" type="number" name="price"
-                                oninput="calculate()" value="{{ $product->price }}">
+                                value="{{ $subscription->price }}">
                             @error('price')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="discount_percent">Discount Percent (%)</label>
-                            <input id="discount_percent" class="form-control" type="discount_percent"
-                                name="discount_percent" oninput="calculate()"
-                                value="{{ $product->discount_percent ?? 0 }}">
-                            @error('discount_percent')
+                            <label for="duration">Duration</label>
+                            <input id="duration" class="form-control" type="number" name="duration"
+                                value="{{ $subscription->duration }}">
+                            @error('duration')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="sale_price">Selling Price (Rs)</label>
-                            <input id="sale_price" class="form-control" type="sale_price" name="sale_price"
-                                value="{{ $product->sale_price }}">
-                            @error('sale_price')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="availability">Availability</label>
-                            <select id="availability" class="form-control" name="availability">
-                                <option value="many_in_stock"
-                                    {{ $product->availability == 'many_in_stock' ? 'selected' : '' }}>Many in stock
+                            <label for="type">Type</label>
+                            <select id="type" class="form-control" name="type">
+                                <option value="days" {{ $subscription->type == 'days' ? 'selected' : '' }}>Days
                                 </option>
-                                <option value="less_in_stock"
-                                    {{ $product->availability == 'less_in_stock' ? 'selected' : '' }}>Less in stock
+                                <option value="months" {{ $subscription->type == 'months' ? 'selected' : '' }}>Months
                                 </option>
-                                <option value="out_of_stock"
-                                    {{ $product->availability == 'out_of_stock' ? 'selected' : '' }}>Out of stock
+                                <option value="year" {{ $subscription->type == 'year' ? 'selected' : '' }}>
+                                    Year
                                 </option>
                             </select>
-                            @error('availability')
+                            @error('type')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="form-group">
-                            <label for="image">Upload Image</label>
-                            <input id="image" class="form-control-file" type="file" name="image">
-                            @error('image')
+                            <label for="plan">Plan</label>
+                            <select id="plan" class="form-control" name="plan">
+                                {{-- <option value="">Select Plan</option> --}}
+                                <option value="basic" {{ $subscription->plan == 'basic' ? 'selected' : '' }}>Basic
+                                </option>
+                                <option value="standard" {{ $subscription->plan == 'standard' ? 'selected' : '' }}>
+                                    Standard
+                                </option>
+                                <option value="premium" {{ $subscription->plan == 'premium' ? 'selected' : '' }}>
+                                    Premium
+                                </option>
+                            </select>
+                            @error('plan')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
-                            <div>
-                                <img src="{{ asset($product->image) }}" width="120" alt="">
-                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="active">Active</label>
+                            <select id="active" name="active" class="form-control">
+                                <option value="">Select</option>
+                                <option value="1"{{ $subscription->active == '1' ? ' selected' : '' }}>Yes
+                                </option>
+                                <option value="0"{{ $subscription->active == '0' ? ' selected' : '' }}>No</option>
+                            </select>
+                            @error('active')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <button type="submit" class="btn btn-primary btn-md">Update Record</button>
                     </form>
@@ -108,4 +106,4 @@
             </div>
         </div>
     </section>
-</x-vendor-layout>
+</x-admin-layout>

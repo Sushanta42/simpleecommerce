@@ -17,4 +17,14 @@ class SubCategory extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * Get all of the products for the SubCategory
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

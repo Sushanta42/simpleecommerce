@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommonAddressController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserSubscriptionController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserProductController;
@@ -50,9 +53,14 @@ Route::middleware('auth:admin')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('category', CategoryController::class);
     Route::resource('subcategory', SubCategoryController::class);
+    Route::resource('order', OrderController::class);
+
+
     Route::resource('user', UserController::class);
     Route::resource('uservendor', VendorController::class);
     Route::resource('commonaddress', CommonAddressController::class);
+    Route::resource('subscription', SubscriptionController::class);
+    Route::resource('usersubscription', UserSubscriptionController::class);
 });
 
 require __DIR__ . '/adminauth.php';

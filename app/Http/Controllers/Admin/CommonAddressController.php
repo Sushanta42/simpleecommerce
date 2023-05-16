@@ -103,7 +103,7 @@ class CommonAddressController extends Controller
             return redirect()->route('commonaddress.index')->with('error', 'Common Address deleted successfully.');
         } catch (\Exception $e) {
             // Handle the exception and show error message
-            return redirect()->back()->with('error', 'Failed to delete commonaddress');
+            return redirect()->back()->with('error', 'Failed to delete Common Address Due to it relation with users/vendors.');
         }
     }
 }

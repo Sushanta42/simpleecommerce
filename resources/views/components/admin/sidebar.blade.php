@@ -7,15 +7,15 @@
         </div>
         <ul class="sidebar-menu" id="sidebarMenu">
             <li class="menu-header">Main</li>
-            <li class="dropdown">
-                <a href="index.html" class="nav-link"><i data-feather="monitor"></i><span>Dashboard</span></a>
+            <li class="dropdown {{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link"><i
+                        data-feather="monitor"></i><span>Dashboard</span></a>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{ request()->is('category*') || request()->is('subcategory*') ? 'active' : '' }}">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="grid"></i><span>Category</span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ route('category.index') }}" class="nav-link"
-                            onclick="loadContent(event, '{{ route('category.index') }}')">
+                    <li><a class="nav-link" href="{{ route('category.index') }}">
                             Category
                         </a>
                     </li>
@@ -29,12 +29,13 @@
             </li>
 
             <li class="menu-header">User</li>
-            <li class="dropdown">
+            <li class="dropdown {{ request()->is('user') || request()->is('user/*') ? 'active' : '' }}">
                 <a href="{{ route('user.index') }}" class="nav-link"><i
                         data-feather="users"></i><span>Customers</span></a>
             </li>
-            <li class="dropdown">
-                <a href="{{ route('uservendor.index') }}" class="nav-link"><i data-feather="truck"></i><span>Vendors</span></a>
+            <li class="dropdown {{ request()->is('uservendor*') ? 'active' : '' }}">
+                <a href="{{ route('uservendor.index') }}" class="nav-link"><i
+                        data-feather="truck"></i><span>Vendors</span></a>
             </li>
             <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
@@ -46,12 +47,23 @@
             </li>
             <li><a class="nav-link" href="timeline.html"><i data-feather="sliders"></i><span>Timeline</span></a></li>
             <li class="menu-header">Addresses</li>
-            <li class="dropdown">
-                <a href="{{ route('commonaddress.index') }}" class="nav-link"><i
-                        data-feather="copy"></i><span>Common Address</span></a>
+            <li class="dropdown {{ request()->is('commonaddress*') ? 'active' : '' }}">
+                <a href="{{ route('commonaddress.index') }}" class="nav-link"><i data-feather="copy"></i><span>Common
+                        Address</span></a>
             </li>
             <li class="dropdown">
-                <a href="{{ route('uservendor.index') }}" class="nav-link"><i data-feather="map-pin"></i><span>User Address</span></a>
+                <a href="{{ route('uservendor.index') }}" class="nav-link"><i data-feather="map-pin"></i><span>User
+                        Address</span></a>
+            </li>
+            <li class="menu-header">Subscriptions</li>
+            <li class="dropdown {{ request()->is('subscription*') ? 'active' : '' }}">
+                <a href="{{ route('subscription.index') }}" class="nav-link"><i
+                        data-feather="dollar-sign"></i><span>Subscription</span></a>
+            </li>
+            <li class="dropdown {{ request()->is('usersubscription*') ? 'active' : '' }}">
+                <a href="{{ route('usersubscription.index') }}" class="nav-link"><i
+                        data-feather="user-check"></i><span>User
+                        Subscription</span></a>
             </li>
         </ul>
     </aside>

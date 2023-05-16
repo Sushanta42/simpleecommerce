@@ -18,4 +18,14 @@ class Category extends Model
     {
         return $this->hasMany(SubCategory::class);
     }
+
+    /**
+     * Get all of the products for the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasManyThrough(Product::class, SubCategory::class);
+    }
 }

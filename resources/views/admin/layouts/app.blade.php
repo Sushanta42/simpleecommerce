@@ -231,33 +231,11 @@
     <script src="/assets/js/page/datatables.js"></script>
     <script src="/assets/js/page/index.js"></script>
     <script src="/assets/js/page/ckeditor.js"></script>
+    <script src="/assets/bundles/datatables/export-tables/buttons.print.min.js"></script>
     <!-- Template JS File -->
     <script src="/assets/js/scripts.js"></script>
     <!-- Custom JS File -->
     <script src="/assets/js/custom.js"></script>
-    <script>
-        // Get the current URL
-        var currentUrl = window.location.href;
-
-        // Get all the "a" tags in the dropdown menus
-        var dropdownLinks = document.querySelectorAll('#sidebarMenu ul.dropdown-menu li a');
-
-        // Loop through each "a" tag and compare its href attribute with the current URL
-        dropdownLinks.forEach(function(link) {
-            if (link.href === currentUrl) {
-                // Add the "active" class to the parent "li" element
-                link.parentNode.classList.add('active');
-
-                // If the parent "li" element has a parent "ul" with "dropdown-menu" class,
-                // add the "show" class to display the dropdown menu
-                var dropdownMenu = link.closest('.dropdown-menu');
-                if (dropdownMenu) {
-                    dropdownMenu.parentNode.classList.add('show');
-                }
-            }
-        });
-    </script>
-
 </body>
 
 
