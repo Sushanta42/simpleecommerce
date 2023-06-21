@@ -45,14 +45,18 @@
                     <li><a class="nav-link" href="owl-carousel.html">Owl Carousel</a></li>
                 </ul>
             </li>
-            <li><a class="nav-link" href="timeline.html"><i data-feather="sliders"></i><span>Timeline</span></a></li>
+            <li class="menu-header">Orders</li>
+            <li class="dropdown {{ request()->is('order*') ? 'active' : '' }}">
+                <a href="{{ route('order.index') }}" class="nav-link"><i
+                        data-feather="dollar-sign"></i><span>Order</span></a>
+            </li>
             <li class="menu-header">Addresses</li>
             <li class="dropdown {{ request()->is('commonaddress*') ? 'active' : '' }}">
                 <a href="{{ route('commonaddress.index') }}" class="nav-link"><i data-feather="copy"></i><span>Common
                         Address</span></a>
             </li>
             <li class="dropdown">
-                <a href="{{ route('uservendor.index') }}" class="nav-link"><i data-feather="map-pin"></i><span>User
+                <a href="{{ route('useraddress.index') }}" class="nav-link"><i data-feather="map-pin"></i><span>User
                         Address</span></a>
             </li>
             <li class="menu-header">Subscriptions</li>

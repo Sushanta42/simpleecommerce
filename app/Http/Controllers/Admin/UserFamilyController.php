@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use Illuminate\Http\Request;
 
-class OrderController extends Controller
+class UserFamilyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $orders = Order::orderBy('created_at', 'desc')->get();
-        return view('admin.order.index', compact('orders'));
+        //
     }
 
     /**
@@ -38,9 +36,7 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        $order = Order::find($id);
-        $order->with('order_items')->first();
-        return view('admin.order.view', compact('order'));
+        //
     }
 
     /**

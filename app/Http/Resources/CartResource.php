@@ -22,7 +22,10 @@ class CartResource extends JsonResource
             "image" => asset($this->product->image),
             "quantity" => $this->quantity,
             "rate" => $this->product->sale_price,
-            "amount" => $this->amount
+            "discount_percent" => $this->product->discount_percent,
+            "mrp" => $this->product->price,
+            "discount_amount" => -($this->product->price - $this->product->sale_price),
+            "amount" => $this->amount,
         ];
     }
 }

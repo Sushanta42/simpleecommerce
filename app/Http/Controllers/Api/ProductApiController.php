@@ -92,8 +92,54 @@ class ProductApiController extends Controller
     public function getCart()
     {
         $carts = Cart::where('user_id', Auth::user()->id)->get();
-        return CartResource::collection($carts);
+
+        $totalAmount = $carts->sum('amount');
+
+        return response()->json([
+            'total_amount' => $totalAmount,
+            'data' => CartResource::collection($carts)
+        ]);
     }
+
+
+    // Update cart
+    public function updateCart(Request $request, $id)
+    {
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)
+            ->where('id', $id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['success' => false, 'message' => 'Cart item not found'], 404);
+        }
+
+        $cart->quantity = $request->quantity;
+        $cart->amount = $cart->quantity * $cart->product->sale_price;
+        $cart->save();
+
+        return response()->json(['success' => true, 'message' => 'Cart item updated successfully'], 200);
+    }
+
+
+    // Delete cart
+    public function deleteCart($id)
+    {
+        $user = Auth::user();
+        $cart = Cart::where('user_id', $user->id)
+            ->where('id', $id)
+            ->first();
+
+        if (!$cart) {
+            return response()->json(['success' => false, 'message' => 'Cart item not found'], 404);
+        }
+
+        $cart->delete();
+
+        return response()->json(['success' => true, 'message' => 'Cart item deleted successfully'], 200);
+    }
+
+
 
     //order
     public function order(Request $request)
@@ -118,5 +164,54 @@ class ProductApiController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Your order has been placed'], 201);
+    }
+
+    // Search products
+    public function searchProducts(Request $request)
+    {
+        try {
+            $keyword = $request->input('keyword');
+
+            $products = Product::where('name', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('description', 'LIKE', '%' . $keyword . '%')
+                ->get();
+
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while searching for products'], 500);
+        }
+    }
+
+    // Get hot products
+    public function getHotProducts()
+    {
+        try {
+            $products = Product::where('label', 'hot')->get();
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while retrieving hot products'], 500);
+        }
+    }
+
+    // Get hot products
+    public function getNewProducts()
+    {
+        try {
+            $products = Product::where('label', 'new')->get();
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while retrieving hot products'], 500);
+        }
+    }
+
+    // Get hot products
+    public function getSaleProducts()
+    {
+        try {
+            $products = Product::where('label', 'sale')->get();
+            return ProductResource::collection($products);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while retrieving hot products'], 500);
+        }
     }
 }

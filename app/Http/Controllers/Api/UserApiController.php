@@ -47,11 +47,37 @@ class UserApiController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid email or password']);
+            return response()->json(['success' => false, 'message' => 'Invalid email or password']);
         }
 
         $token = $user->createToken($request->email)->plainTextToken;
         return response()->json(['success' => true, 'token' => $token, 'user' => $user], 200);
     }
+
     //logout user
+
+    //change password
+    public function changePassword(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'current_password' => 'required',
+            'new_password' => 'required|different:current_password',
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+        if ($data->fails()) {
+            return response()->json(['success' => false, 'message' => $data->messages()], 400);
+        }
+
+        $user = $request->user();
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['success' => false, 'message' => 'Invalid current password'], 400);
+        }
+
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json(['success' => true, 'message' => 'Password changed successfully'], 200);
+    }
 }

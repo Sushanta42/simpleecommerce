@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\CommonAddressController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\UserAddressController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserFamilyController;
 use App\Http\Controllers\Admin\UserSubscriptionController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\ProfileController;
@@ -61,6 +63,8 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('commonaddress', CommonAddressController::class);
     Route::resource('subscription', SubscriptionController::class);
     Route::resource('usersubscription', UserSubscriptionController::class);
+    Route::resource('useraddress', UserAddressController::class);
+    Route::resource('userfamily', UserFamilyController::class);
 });
 
 require __DIR__ . '/adminauth.php';

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryUserResource;
+use App\Http\Resources\ProductResource;
 use App\Http\Resources\SubCategoryResource;
 use App\Models\Category;
+use App\Models\Product;
 use App\Models\SubCategory;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +20,27 @@ class CategoryApiController extends Controller
         $categories = Category::with('subcategories.products')->get();
         return CategoryResource::collection($categories);
     }
+
+    //get category by id
+    // public function getCategory($id)
+    // {
+    //     $category = Category::with('subcategories.products')->find($id);
+    //     return CategoryResource::collection([$category]); // Wrap the category in an array
+    // }
+
+    public function getCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $products = $category->subcategories()->with('products')->get()->pluck('products')->flatten();
+        return ProductResource::collection($products);
+    }
+
+    public function getSubCategory($id)
+    {
+        $products = Product::where('sub_category_id', $id)->get();
+        return ProductResource::collection($products);
+    }
+
 
     //get subcategories
     public function getSubCategories()

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class UserSubscriptionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,12 +17,13 @@ class CategoryResource extends JsonResource
         // return parent::toArray($request);
         return [
             "id" => $this->id,
-            "name" => $this->name,
-            "slug" => $this->slug,
-            "image" => asset($this->image),
-            "products" => ProductResource::collection($this->products),
-            "subcategories" => SubCategoryResource::collection($this->subcategories)
+            "subscription_id" => $this->subscription->id,
+            "plan_name" => $this->subscription->name,
+            "price" => $this->subscription->price,
+            "start_date" => $this->start_date,
+            "end_date" => $this->end_date,
+            "status" => $this->status,
+            "paid" => $this->paid,
         ];
     }
 }
-
