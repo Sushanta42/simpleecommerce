@@ -49,3 +49,23 @@ function uploadRoadImage($request, $object, $fileName)
         $object->road_image = "images/road/$newName";
     }
 }
+
+function uploadMilestoneImage($request, $object, $fileName)
+{
+    if ($request->hasFile('image')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/milestone", $newName);
+        $object->image = "images/milestone/$newName";
+    }
+}
+
+function uploadCarouselImage($request, $object, $fileName)
+{
+    if ($request->hasFile('image')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/carousel", $newName);
+        $object->image = "images/carousel/$newName";
+    }
+}

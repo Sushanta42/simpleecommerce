@@ -47,4 +47,44 @@ class User extends Authenticatable
     {
         return $this->belongsTo(CommonAddress::class);
     }
+
+    /**
+     * Get all of the coupons for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function coupons()
+    {
+        return $this->hasMany(Coupon::class);
+    }
+
+    /**
+     * Get all of the userMilestones for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userMilestones()
+    {
+        return $this->hasMany(UserMilestone::class);
+    }
+
+    /**
+     * Get all of the orders for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get all of the userSubscriptions for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userSubscriptions()
+    {
+        return $this->hasMany(UserSubscription::class);
+    }
 }

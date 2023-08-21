@@ -58,7 +58,6 @@
                         <div class="form-group">
                             <label for="status">Status</label>
                             <select id="status" class="form-control" name="status">
-                                <option value="">Select Status</option>
                                 <option value="active" {{ $usersubscription->status == 'active' ? 'selected' : '' }}>
                                     Active
                                 </option>
@@ -77,7 +76,6 @@
                         <div class="form-group">
                             <label for="paid">Paid</label>
                             <select id="paid" name="paid" class="form-control">
-                                <option value="">Select</option>
                                 <option value="1"{{ $usersubscription->paid == '1' ? ' selected' : '' }}>Yes
                                 </option>
                                 <option value="0"{{ $usersubscription->paid == '0' ? ' selected' : '' }}>No

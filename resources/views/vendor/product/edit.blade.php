@@ -91,7 +91,6 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-
                         <div class="form-group">
                             <label for="image">Upload Image</label>
                             <input id="image" class="form-control-file" type="file" name="image">

@@ -26,6 +26,7 @@ class CartResource extends JsonResource
             "mrp" => $this->product->price,
             "discount_amount" => -($this->product->price - $this->product->sale_price),
             "amount" => $this->amount,
+            "total_amount" => $this->total_amount,
         ];
     }
 }

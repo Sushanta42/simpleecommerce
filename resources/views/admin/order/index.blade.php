@@ -37,7 +37,7 @@
                                 <th class="border border-1">Status</th>
                                 <th class="border border-1">Total</th>
                                 <th class="border border-1">Created At</th>
-                                <th class="border border-1">Delivered At(Time)</th>
+                                <th class="border border-1">Delivered/Cancel At(Time)</th>
                                 <th class="border border-1">Action</th>
                             </tr>
                         </thead>
@@ -54,7 +54,7 @@
                                     </td>
                                     <td class="border border-1">{{ $item->total }}</td>
                                     <td class="border border-1">{{ $item->created_at }}</td>
-                                    <td class="border border-1">{{ $item->deliverd_time }}</td>
+                                    <td class="border border-1">{{ $item->delivered_time }}</td>
                                     <td class="border border-1">
                                         <form action="{{ route('order.destroy', $item->id) }}" method="post">
                                             @csrf
@@ -90,8 +90,8 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <p>Are you sure you want to delete this product?</p>
-                                                            <p><strong>Product Name:</strong> {{ $item->name }}</p>
+                                                            <p>Are you sure you want to delete this Order?</p>
+                                                            <p><strong>Order Total:</strong> {{ $item->total }}</p>
                                                             {{-- <p><strong>Sub Category: </strong>
                                                                 {{ $item->sub_category->name }}</p>
                                                             <p><strong>Image:</strong> <img

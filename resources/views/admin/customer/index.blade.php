@@ -46,6 +46,7 @@
                                 <th class="border border-1">Phone</th>
                                 <th class="border border-1">Address</th>
                                 <th class="border border-1">Email Verified At</th>
+                                <th class="border border-1">Subscription</th>
                                 <th class="border border-1">Created At</th>
                                 <th class="border border-1">Updated At</th>
                                 <th class="border border-1">Action</th>
@@ -61,6 +62,13 @@
                                     <td class="border border-1">{{ $item->phone }}</td>
                                     <td class="border border-1">{{ $item->common_address->name ?? 'null' }}</td>
                                     <td class="border border-1">{{ $item->email_verified_at }}</td>
+                                    <td class="border border-1">
+                                        @if ($item->userSubscriptions->count() > 0)
+                                            <span class="badge badge-success">Yes</span>
+                                        @else
+                                            <span class="badge badge-danger">No</span>
+                                        @endif
+                                    </td>
                                     <td class="border border-1">{{ $item->created_at }}</td>
                                     <td class="border border-1">{{ $item->updated_at }}</td>
                                     <td class="border border-1">
@@ -73,8 +81,8 @@
                                                     class="btn btn-info btn-sm mr-2">Edit</a>
 
                                                 <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-danger btn-sm mr-2" data-toggle="modal"
-                                                    data-target="#deleteModal{{ $item->id }}">
+                                                <button type="button" class="btn btn-danger btn-sm mr-2"
+                                                    data-toggle="modal" data-target="#deleteModal{{ $item->id }}">
                                                     Delete
                                                 </button>
                                             </div>

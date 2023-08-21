@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Milestone;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Models\UserMilestone;
 use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -99,7 +101,7 @@ class UserSubscriptionController extends Controller
             $subscription = Subscription::findOrFail($request->subscription_id);
 
             $existingSubscription = UserSubscription::where('user_id', $request->user_id)
-                ->where('status', '!=', 'expired')
+                ->where('status', '=', 'active')
                 ->first();
 
             if ($existingSubscription) {
@@ -114,6 +116,12 @@ class UserSubscriptionController extends Controller
             $usersubscription->status = $request->status;
             $usersubscription->paid = $request->paid;
             $usersubscription->save();
+
+            // Create user milestones if the usersubscription status is 'active'
+            if ($usersubscription->status === 'active') {
+                // Create user milestones for active milestones
+                $this->createUserMilestonesForActiveMilestones($usersubscription->user_id);
+            }
 
             Session::flash('success', 'User Subscription added successfully!'); // Add success message to flash session
             return redirect()->route('usersubscription.index');
@@ -141,6 +149,21 @@ class UserSubscriptionController extends Controller
         return $endDate;
     }
 
+    // Create user milestones for active milestones
+    private function createUserMilestonesForActiveMilestones($userId)
+    {
+        $activeMilestones = Milestone::where('status', '=', 'active')->get();
+        foreach ($activeMilestones as $milestone) {
+            $userMilestone = new UserMilestone();
+            $userMilestone->user_id = $userId;
+            $userMilestone->milestone_id = $milestone->id;
+            $userMilestone->amount = 0; // Set initial amount to 0
+            $userMilestone->start_date = now(); // Set the start date to the current date
+            $userMilestone->end_date = now()->addDays($milestone->duration);
+            $userMilestone->status = 'active'; // Assuming the default status is 'active' for a new milestone
+            $userMilestone->save();
+        }
+    }
 
     /**
      * Display the specified resource.

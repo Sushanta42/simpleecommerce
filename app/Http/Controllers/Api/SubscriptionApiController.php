@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubscriptionResource;
 use App\Http\Resources\UserSubscriptionResource;
+use App\Models\Milestone;
 use App\Models\Subscription;
+use App\Models\UserMilestone;
 use App\Models\UserSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +39,7 @@ class SubscriptionApiController extends Controller
             $subscription = Subscription::findOrFail($request->subscription_id);
 
             $existingSubscription = UserSubscription::where('user_id', Auth::user()->id)
-                ->where('status', '!=', 'expired')
+                ->where('status', '=', 'active')
                 ->first();
 
             if ($existingSubscription) {
@@ -52,6 +54,16 @@ class SubscriptionApiController extends Controller
             $usersubscription->status = 'active'; // Assuming the default status is 'active' for a new subscription
             $usersubscription->paid = false; // Assuming the default paid status is false
             $usersubscription->save();
+
+            // Check if active UserMilestone already exists for the user
+            $activeUserMilestone = UserMilestone::where('user_id', Auth::user()->id)
+                ->where('status', '=', 'active')
+                ->first();
+
+            // Create user milestones for active milestones if not exists
+            if (!$activeUserMilestone) {
+                $this->createUserMilestonesForActiveMilestones(Auth::user()->id);
+            }
 
             return response()->json(['success' => true, 'message' => 'User subscription added successfully'], 200);
         } catch (\Exception $e) {
@@ -74,6 +86,22 @@ class SubscriptionApiController extends Controller
                 break;
         }
         return $endDate;
+    }
+
+    // Create user milestones for active milestones
+    private function createUserMilestonesForActiveMilestones($userId)
+    {
+        $activeMilestones = Milestone::where('status', '=', 'active')->get();
+        foreach ($activeMilestones as $milestone) {
+            $userMilestone = new UserMilestone();
+            $userMilestone->user_id = $userId;
+            $userMilestone->milestone_id = $milestone->id;
+            $userMilestone->amount = 0; // Set initial amount to 0
+            $userMilestone->start_date = now(); // Set the start date to the current date
+            $userMilestone->end_date = now()->addDays($milestone->duration);
+            $userMilestone->status = 'active'; // Assuming the default status is 'active' for a new milestone
+            $userMilestone->save();
+        }
     }
 
     // Get User Subscription

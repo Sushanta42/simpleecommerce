@@ -16,6 +16,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::all();
+
+        // Fetch user subscriptions and associate them with the users using eager loading
+        $users->load('userSubscriptions');
+
         return view('admin.customer.index', compact('users'));
     }
 

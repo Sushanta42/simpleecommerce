@@ -70,4 +70,69 @@ class CategoryApiController extends Controller
 
         return CategoryUserResource::collection($categories);
     }
+
+    // Get subcategorybycommonaddress
+    public function getSubCategoriesByCommonAddress()
+    {
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Get the common_address_id of the user
+        $common_address_id = $user->common_address_id;
+
+        // Retrieve subcategories that have products from vendors with common_address_id matching the user's common_address_id
+        $subcategories = SubCategory::whereHas('products.vendor', function ($query) use ($common_address_id) {
+            $query->where('common_address_id', $common_address_id);
+        })->with(['products' => function ($query) use ($common_address_id) {
+            $query->whereHas('vendor', function ($query) use ($common_address_id) {
+                $query->where('common_address_id', $common_address_id);
+            });
+        }])->get();
+
+        return SubCategoryResource::collection($subcategories);
+    }
+
+    // Get products in a specific category by common address of user and vendors
+    public function getCategoryByCommonAddress($id)
+    {
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Get the common_address_id of the user
+        $common_address_id = $user->common_address_id;
+
+        // Retrieve the category with the specified ID
+        $category = Category::findOrFail($id);
+
+        // Retrieve products in the category that have vendors with common_address_id matching the user's common_address_id
+        $products = $category->subcategories()->whereHas('products.vendor', function ($query) use ($common_address_id) {
+            $query->where('common_address_id', $common_address_id);
+        })->with(['products' => function ($query) use ($common_address_id) {
+            $query->whereHas('vendor', function ($query) use ($common_address_id) {
+                $query->where('common_address_id', $common_address_id);
+            });
+        }])->get()->pluck('products')->flatten();
+
+        return ProductResource::collection($products);
+    }
+
+    // Get products in a specific subcategory by common address of user and vendors
+    public function getSubCategoryByCommonAddress($id)
+    {
+        // Get the currently authenticated user
+        $user = Auth::user();
+
+        // Get the common_address_id of the user
+        $common_address_id = $user->common_address_id;
+
+        // Retrieve the subcategory with the specified ID
+        $subcategory = SubCategory::findOrFail($id);
+
+        // Retrieve products in the subcategory that have vendors with common_address_id matching the user's common_address_id
+        $products = $subcategory->products()->whereHas('vendor', function ($query) use ($common_address_id) {
+            $query->where('common_address_id', $common_address_id);
+        })->get();
+
+        return ProductResource::collection($products);
+    }
 }

@@ -1,13 +1,22 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutUsController;
+use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommonAddressController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\MilestoneController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PrivacyPolicyController;
 use App\Http\Controllers\Admin\SubCategoryController;
 use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\UserAddressController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\UserCouponController;
 use App\Http\Controllers\Admin\UserFamilyController;
+use App\Http\Controllers\Admin\UserMilestoneController;
 use App\Http\Controllers\Admin\UserSubscriptionController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\ProfileController;
@@ -56,6 +65,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('subcategory', SubCategoryController::class);
     Route::resource('order', OrderController::class);
+    Route::resource('carousel', CarouselController::class);
 
 
     Route::resource('user', UserController::class);
@@ -65,6 +75,16 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('usersubscription', UserSubscriptionController::class);
     Route::resource('useraddress', UserAddressController::class);
     Route::resource('userfamily', UserFamilyController::class);
+    Route::resource('coupon', CouponController::class);
+    Route::resource('usercoupon', UserCouponController::class);
+    Route::resource('milestone', MilestoneController::class);
+    Route::resource('usermilestone', UserMilestoneController::class);
+
+    Route::resource('privacypolicy', PrivacyPolicyController::class);
+    Route::resource('faqs', FaqController::class);
+    Route::resource('aboutus', AboutUsController::class);
+    Route::resource('terms', TermController::class);
+
 });
 
 require __DIR__ . '/adminauth.php';

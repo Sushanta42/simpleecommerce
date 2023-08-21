@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 
 class OrderController extends Controller
 {
@@ -48,7 +50,8 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $order = Order::find($id);
+        return view('admin.order.edit', compact('order'));
     }
 
     /**
@@ -56,7 +59,23 @@ class OrderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'delivered_time' => 'required', // Add validation rules for name field
+        ], [
+            'delivered_time.required' => 'The Datetime field is required.', // Custom error message for name field
+        ]);
+        try {
+            $order = Order::find($id);
+            $order->status = $request->status;
+            $order->delivered_time = $request->delivered_time;
+
+            $order->update();
+            Session::flash('success', 'Order updated successfully!'); // Add success message to flash session
+            return redirect()->route('order.index');
+        } catch (\Exception $e) {
+            // Handle the exception and show error message
+            return redirect()->back()->with('error', 'Failed to update Order');
+        }
     }
 
     /**

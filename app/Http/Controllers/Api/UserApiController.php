@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommonAddressResource;
+use App\Models\CommonAddress;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,6 +31,7 @@ class UserApiController extends Controller
                 $user->email = $request->email;
                 $user->phone = $request->phone;
                 $user->password = Hash::make($request->password);
+                $user->common_address_id = $request->common_address_id; // Link user to common address
                 $user->save();
             }
             return response()->json(['message' => 'Registration Successful', 'success' => true], 201);
@@ -79,5 +82,16 @@ class UserApiController extends Controller
         $user->save();
 
         return response()->json(['success' => true, 'message' => 'Password changed successfully'], 200);
+    }
+
+    //get common address
+    public function getCommonAddresses()
+    {
+        try {
+            $commonaddresses = CommonAddress::all();
+            return CommonAddressResource::collection($commonaddresses);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred while retrieving commonaddresses'], 500);
+        }
     }
 }
