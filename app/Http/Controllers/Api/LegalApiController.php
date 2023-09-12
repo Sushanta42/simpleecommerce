@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CarouselResource;
+use App\Http\Resources\LegalResource;
 use App\Models\AboutUs;
 use App\Models\Carousel;
 use App\Models\Faq;
@@ -46,8 +47,8 @@ class LegalApiController extends Controller
     {
         try {
             $faqs = Faq::all();
-            return response()->json($faqs);
-            // return SubscriptionResource::collection($faqs);
+            // return response()->json($faqs);
+            return LegalResource::collection($faqs);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving faqs'], 500);
         }
@@ -58,8 +59,8 @@ class LegalApiController extends Controller
     {
         try {
             $terms = Term::all();
-            return response()->json($terms);
-            // return SubscriptionResource::collection($terms);
+            // return response()->json($terms);
+            return LegalResource::collection($terms);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving terms and conditions'], 500);
         }
@@ -70,8 +71,8 @@ class LegalApiController extends Controller
     {
         try {
             $privacypolicies = PrivacyPolicy::all();
-            return response()->json($privacypolicies);
-            // return SubscriptionResource::collection($privacypolicies);
+            // return response()->json($privacypolicies);
+            return LegalResource::collection($privacypolicies);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving Privacy Policies'], 500);
         }
@@ -82,8 +83,8 @@ class LegalApiController extends Controller
     {
         try {
             $aboutus = AboutUs::all();
-            return response()->json($aboutus);
-            // return SubscriptionResource::collection($aboutus);
+            // return response()->json($aboutus);
+            return LegalResource::collection($aboutus);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving about us'], 500);
         }

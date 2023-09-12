@@ -54,6 +54,11 @@ class CouponApiController extends Controller
         // Calculate the discount amount
         $discountAmount = $coupon->discount_amount;
 
+        // Check if the discount amount is greater than the total amount in the cart
+        if ($discountAmount >= $totalAmount) {
+            return response()->json(['success' => false, 'message' => 'Coupon amount is greater than or equal to the cart total'], 400);
+        }
+
         // Apply the discount amount to the total amount in the cart
         $totalAmount -= $discountAmount;
 

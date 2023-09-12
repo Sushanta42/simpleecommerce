@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommonAddressResource;
 use App\Models\CommonAddress;
+use App\Models\Otp;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -93,5 +94,65 @@ class UserApiController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving commonaddresses'], 500);
         }
+    }
+
+    // Add a new method for sending OTP to the user's phone number.
+    public function sendOtp(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'phone' => 'required|exists:users,phone',
+        ]);
+
+        if ($data->fails()) {
+            return response()->json(['success' => false, 'message' => 'Invalid Phone Number!!'], 400);
+        }
+
+        // Generate a random OTP code (you can use your own logic for this).
+        $otpCode = mt_rand(1000, 9999);
+
+        // Store the OTP code in the OTP table.
+        Otp::create([
+            'phone' => $request->phone,
+            'otp_code' => $otpCode,
+            'expires_at' => now()->addMinutes(10), // OTP expiration time (adjust as needed).
+        ]);
+
+        // Send the OTP code to the user's phone number (you need to implement this).
+
+        return response()->json(['success' => true, 'message' => 'OTP sent successfully'], 200);
+    }
+
+    // Add a new method to verify the OTP and change the password.
+    public function forgetPassword(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'phone' => 'required|exists:users,phone',
+            'otp_code' => 'required',
+            'new_password' => 'required',
+        ]);
+
+        if ($data->fails()) {
+            return response()->json(['success' => false, 'message' => $data->messages()], 400);
+        }
+
+        // Verify the OTP code.
+        $otp = Otp::where('phone', $request->phone)
+            ->where('otp_code', $request->otp_code)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$otp) {
+            return response()->json(['success' => false, 'message' => 'Invalid OTP code'], 400);
+        }
+
+        // Update the user's password.
+        $user = User::where('phone', $request->phone)->first();
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        // Delete the used OTP.
+        $otp->delete();
+
+        return response()->json(['success' => true, 'message' => 'Password changed successfully'], 200);
     }
 }

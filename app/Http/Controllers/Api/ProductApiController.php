@@ -90,6 +90,14 @@ class ProductApiController extends Controller
         $couponDiscount = $carts->first()->coupon_discount;
         $couponId = $carts->first()->coupon_id;
         $totalAmount = $carts->sum('amount') - $couponDiscount;
+
+        // Check if the coupon amount is greater than the updated total amount
+        if ($request->coupon_amount > $totalAmount) {
+            // Remove the coupon
+            $couponDiscount = 0;
+            $couponId = null;
+        }
+
         foreach ($carts as $cartItem) {
             $cartItem->total_amount = $totalAmount;
             $cartItem->coupon_id = $couponId;
@@ -121,7 +129,12 @@ class ProductApiController extends Controller
         $totalAmount = $carts->first()->total_amount;
         $couponDiscount = $carts->first()->coupon_discount;
 
-
+        // Check if the coupon amount is greater than the total amount
+        if ($couponDiscount > $totalAmount) {
+            // Remove the coupon
+            $couponDiscount = 0;
+            $totalAmount = $itemTotal; // Reset the total amount without the coupon
+        }
 
         return response()->json([
             'item_total' => $itemTotal,
@@ -155,6 +168,12 @@ class ProductApiController extends Controller
         $couponId = $cart->coupon_id;
         $totalAmount = $carts->sum('amount') - $couponDiscount;
 
+        // Check if the coupon amount is greater than the updated total amount
+        if ($request->coupon_amount > $totalAmount) {
+            // Remove the coupon
+            $couponDiscount = 0;
+            $couponId = null;
+        }
 
         foreach ($carts as $cartItem) {
             $cartItem->coupon_id = $couponId;
@@ -188,6 +207,13 @@ class ProductApiController extends Controller
         $couponId = $cart->coupon_id;
         $totalAmount = $carts->sum('amount') - $couponDiscount;
 
+        // Check if the coupon amount is greater than the updated total amount
+        if ($couponDiscount > $totalAmount) {
+            // Remove the coupon
+            $couponDiscount = 0;
+            $couponId = null;
+            $totalAmount = $carts->sum('amount');
+        }
 
         foreach ($carts as $cartItem) {
             $cartItem->total_amount = $totalAmount;

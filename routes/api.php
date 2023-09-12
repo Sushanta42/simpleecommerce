@@ -83,3 +83,6 @@ Route::get('faqs', [LegalApiController::class, 'getFaqs']);
 Route::get('termsandconditions', [LegalApiController::class, 'getTerms']);
 Route::get('privacypolicies', [LegalApiController::class, 'getPrivacy']);
 Route::get('aboutus', [LegalApiController::class, 'getAboutUs']);
+Route::post('sendotp', [UserApiController::class, 'sendOtp']);
+Route::post('forgetpassword', [UserApiController::class, 'forgetPassword']);
+
