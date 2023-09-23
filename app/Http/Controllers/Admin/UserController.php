@@ -50,6 +50,7 @@ class UserController extends Controller
             $user->name = $request->input('name');
             $user->email = $request->input('email');
             $user->phone = $request->input('phone');
+            $user->dob = $request->dob;
             $user->common_address_id = $request->common_address_id;
             $user->password = bcrypt($request->input('password'));
 
@@ -67,7 +68,9 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::find($id);
+        $commonaddresses = CommonAddress::all();
+        return view('admin.customer.view', compact('user', 'commonaddresses'));
     }
 
     /**
@@ -97,7 +100,9 @@ class UserController extends Controller
             $user->name = $request->name;
             $user->email = $request->email;
             $user->phone = $request->phone;
+            $user->dob = $request->dob;
             $user->common_address_id = $request->common_address_id;
+            $user->description = $request->description;
 
             $user->update();
             Session::flash('success', 'User updated successfully!'); // Add success message to flash session

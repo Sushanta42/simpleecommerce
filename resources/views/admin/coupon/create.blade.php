@@ -23,11 +23,11 @@
                     <form action="{{ route('coupon.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="user_id">User Name</label>
+                            <label for="user_id">User Phone</label>
                             <select id="user_id" class="form-control" name="user_id">
                                 <option value="">Select User</option>
                                 @foreach ($users as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->phone }}</option>
                                 @endforeach
                             </select>
                             @error('user_id')
@@ -59,7 +59,7 @@
                         </div>
                         <div class="form-group">
                             <label for="max_uses">Max Uses</label>
-                            <input id="max_uses" class="form-control" type="text" name="max_uses" maxlength="1"
+                            <input id="max_uses" class="form-control" type="text" name="max_uses" maxlength="2"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 value="{{ old('max_uses', isset($max_uses) ? $max_uses : '') }}">
                             @error('max_uses')

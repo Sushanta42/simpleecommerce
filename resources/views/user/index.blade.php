@@ -32,9 +32,9 @@
                                 <th class="border border-1">Price (Rs.)</th>
                                 <th class="border border-1">Selling Price (Rs.)</th>
                                 <th class="border border-1">Availability</th>
-                                <th class="border border-1">Created At</th>
-                                <th class="border border-1">Updated At</th>
-                                <th class="border border-1">Action</th>
+                                {{-- <th class="border border-1">Created At</th>
+                                <th class="border border-1">Updated At</th> --}}
+                                {{-- <th class="border border-1">Action</th> --}}
                             </tr>
                         </thead>
 
@@ -64,9 +64,9 @@
                                     <td class="border border-1">{{ $item->price }}</td>
                                     <td class="border border-1">{{ $item->sale_price }}</td>
                                     <td class="border border-1">{{ $item->availability }}</td>
-                                    <td class="border border-1">{{ $item->created_at }}</td>
-                                    <td class="border border-1">{{ $item->updated_at }}</td>
-                                    <td class="border border-1">
+                                    {{-- <td class="border border-1">{{ $item->created_at }}</td>
+                                    <td class="border border-1">{{ $item->updated_at }}</td> --}}
+                                    {{-- <td class="border border-1">
                                         <form action="{{ route('product.destroy', $item->id) }}" method="post">
                                             @csrf
                                             @method('delete')
@@ -125,7 +125,7 @@
                                                 </div>
                                             </div>
                                         </form>
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

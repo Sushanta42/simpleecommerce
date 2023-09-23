@@ -17,8 +17,7 @@
                                             <strong>Billed To:</strong><br>
                                             {{ $order->user->name }}<br>
                                             {{ $order->user->phone }}<br>
-                                            {{ $order->user->common_address->name }}<br>
-                                            NC, 27591, USA
+                                            {{ $order->user->common_address->name ?? 'N/A'}}<br>
                                         </address>
                                     </div>
                                     <div class="col-md-6 text-md-right ship-address">
@@ -26,8 +25,11 @@
                                             <strong>Shipped To:</strong><br>
                                             {{ $order->user->name }}<br>
                                             {{ $order->user->phone }}<br>
-                                            {{ $order->user->common_address->name }}<br>
-                                            Springfield Center, USA
+                                            {{ $order->user->common_address->name ?? 'N/A'}}<br>
+                                            <div class="invoice-detail-item">
+                                                <div class="invoice-detail-name">Shipping</div>
+                                                <div class="invoice-detail-value">Free</div>
+                                            </div>
                                         </address>
                                     </div>
                                 </div>
@@ -35,8 +37,8 @@
                                     <div class="col-md-6">
                                         <address>
                                             <strong>Payment Method:</strong><br>
-                                            Visa ending **** 5687<br>
-                                            test@example.com
+                                            Cash or QR<br>
+                                            {{ $order->user->email ?? 'N/A'}}<br>
                                         </address>
                                     </div>
                                     <div class="col-md-6 text-md-right order-date">
@@ -68,11 +70,11 @@
                                                 <tr>
                                                     <td>{{ ++$index }}</td>
                                                     <td>{{ $item->product->name }}</td>
-                                                    <td class="text-center invoice-detail-value-rs">Rs.
+                                                    <td class="text-center invoice-detail-value-rs">
                                                         {{ $item->product->sale_price }}</td>
                                                     <td class="text-center invoice-detail-value-rs">
                                                         {{ $item->quantity }}</td>
-                                                    <td class="text-right invoice-detail-value-rs">Rs.
+                                                    <td class="text-right invoice-detail-value-rs">
                                                         {{ $item->amount }}</td>
                                                 </tr>
                                             @endforeach
@@ -85,20 +87,26 @@
                                         <p class="section-lead">The payment method that we provide is to make it easier
                                             for you to pay
                                             invoices.</p>
-                                        <div class="images">
+                                        {{-- <div class="images">
                                             <img src="/assets/img/cards/visa.png" alt="visa">
                                             <img src="/assets/img/cards/jcb.png" alt="jcb">
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <div class="col-lg-4 text-right">
                                         <div class="invoice-detail-item">
                                             <div class="invoice-detail-name">Subtotal</div>
                                             <div class="invoice-detail-value invoice-detail-value-st">Rs.
-                                                {{ $order->total }}</div>
+                                                {{ $order->subtotal }}</div>
                                         </div>
                                         <div class="invoice-detail-item">
-                                            <div class="invoice-detail-name">Shipping</div>
-                                            <div class="invoice-detail-value">Free</div>
+                                            <div class="invoice-detail-name">Discount Amount (छुट रकम)</div>
+                                            <div class="invoice-detail-value invoice-detail-value-st">Rs.
+                                                {{ $order->discount_amount }}</div>
+                                        </div>
+                                        <div class="invoice-detail-item">
+                                            <div class="invoice-detail-name">Coupon Discount (कुपन छूट)</div>
+                                            <div class="invoice-detail-value invoice-detail-value-st">Rs.
+                                                {{ $order->coupon_discount }}</div>
                                         </div>
                                         <hr class="mt-2 mb-2">
                                         <div class="invoice-detail-item">
@@ -136,11 +144,11 @@
         printWindow.document.write('<html><head><title>Invoice</title>');
         printWindow.document.write('<style>');
         printWindow.document.write('.ship-address { position: absolute; top: 90px; right: 20px; }');
-        printWindow.document.write('.order-date { position: absolute; top: 190px; right: 40px; }');
+        printWindow.document.write('.order-date { position: absolute; top: 200px; right: 40px; }');
         printWindow.document.write('.invoice-detail-value-lg { font-size: 25px; }'); // Set font size
         printWindow.document.write('.invoice-detail-value-st { font-size: 20px; }'); // Set font size
         printWindow.document.write(
-        '@media print { .no-print { display: none; } }'); // Add media query to hide print elements
+            '@media print { .no-print { display: none; } }'); // Add media query to hide print elements
         printWindow.document.write('</style>');
         printWindow.document.write('</head><body>');
         printWindow.document.write('<div class="ship-address">'); // Add ship-address div

@@ -89,7 +89,8 @@ class UserAddressController extends Controller
     public function show(string $id)
     {
         $useraddress = Address::find($id);
-        return view('admin.useraddress.view', compact('useraddress'));
+        $users = User::all();
+        return view('admin.useraddress.view', compact('useraddress', 'users'));
     }
 
     /**

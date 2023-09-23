@@ -45,7 +45,8 @@
                                 <th class="border border-1">Email</th>
                                 <th class="border border-1">Phone</th>
                                 <th class="border border-1">Address</th>
-                                <th class="border border-1">Email Verified At</th>
+                                <th class="border border-1">Coordinate</th>
+                                <th class="border border-1">No. of Products</th>
                                 <th class="border border-1">Created At</th>
                                 <th class="border border-1">Updated At</th>
                                 <th class="border border-1">Action</th>
@@ -59,8 +60,9 @@
                                     <td class="border border-1">{{ $item->name }}</td>
                                     <td class="border border-1">{{ $item->email }}</td>
                                     <td class="border border-1">{{ $item->phone }}</td>
-                                    <td class="border border-1">{{ $item->common_address->name ?? 'null' }}</td>
-                                    <td class="border border-1">{{ $item->email_verified_at }}</td>
+                                    <td class="border border-1">{{ $item->common_address->name ?? 'N/A' }}</td>
+                                    <td class="border border-1">{{ $item->coordinate ?? 'N/A' }}</td>
+                                    <td class="border border-1">{{ $item->products->count() }}</td> <!-- Retrieve and display the number of products -->
                                     <td class="border border-1">{{ $item->created_at }}</td>
                                     <td class="border border-1">{{ $item->updated_at }}</td>
                                     <td class="border border-1">

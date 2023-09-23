@@ -58,15 +58,20 @@
                                         <form action="{{ route('useraddress.destroy', $item->id) }}" method="post">
                                             @csrf
                                             @method('delete')
-                                            <a href="{{ route('useraddress.edit', $item->id) }}"
-                                                class="btn btn-info btn-sm">Edit</a>
-                                            <!-- Add this code inside your index.blade.php file -->
+                                            <div class="d-flex">
+                                                <a href="{{ route('useraddress.show', $item->id) }}"
+                                                    class="btn btn-warning btn-sm mr-2">View</a>
 
-                                            <!-- Button trigger modal -->
-                                            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                data-target="#deleteModal{{ $item->id }}">
-                                                Delete
-                                            </button>
+                                                <a href="{{ route('useraddress.edit', $item->id) }}"
+                                                    class="btn btn-info btn-sm mr-2">Edit</a>
+                                                <!-- Add this code inside your index.blade.php file -->
+
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-danger btn-sm mr-2"
+                                                    data-toggle="modal" data-target="#deleteModal{{ $item->id }}">
+                                                    Delete
+                                                </button>
+                                            </div>
 
                                             <!-- Modal -->
                                             <div class="modal fade" id="deleteModal{{ $item->id }}" tabindex="-1"

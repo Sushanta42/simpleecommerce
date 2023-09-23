@@ -17,12 +17,25 @@
             @endif
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <a href="{{ route('uservendor.index') }}" class="btn btn-primary btn-sm">Back</a>
-                    <h4>Vendors</h4>
+                    <a href="{{ route('userfamily.index') }}" class="btn btn-primary btn-sm">Back</a>
+                    <h4>Customer</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('uservendor.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('userfamily.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
+                        <div class="form-group">
+                            <label for="user_id">User Number</label>
+                            <select id="user_id" class="form-control" name="user_id"
+                                value="{{ old('user_id') }}">
+                                <option value="">Select User Number</option>
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}">{{ $item->phone }}</option>
+                                @endforeach
+                            </select>
+                            @error('user_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input id="name" class="form-control" type="text" name="name"
@@ -32,15 +45,15 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input id="email" class="form-control" type="email" name="email"
-                                value="{{ old('email') }}">
-                            @error('email')
+                            <label for="mobile">Mobile</label>
+                            <input id="mobile" class="form-control" type="number" name="mobile"
+                                value="{{ old('mobile') }}">
+                            @error('mobile')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone</label>
+                            <label for="phone">Phone (Optional)</label>
                             <input id="phone" class="form-control" type="number" name="phone"
                                 value="{{ old('phone') }}">
                             @error('phone')
@@ -48,30 +61,10 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="common_address_id">Common Address</label>
-                            <select id="common_address_id" class="form-control" name="common_address_id"
-                                value="{{ old('common_address_id') }}">
-                                <option value="">Select Common-Address</option>
-                                @foreach ($commonaddresses as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('common_address_id')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input id="password" class="form-control" type="password" name="password">
-                            @error('password')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="coordinate">Coordinate</label>
-                            <input id="coordinate" class="form-control" type="text" name="coordinate"
-                                value="{{ old('coordinate') }}">
-                            @error('coordinate')
+                            <label for="dob">Date of Birth</label>
+                            <input id="dob" class="form-control" type="date" name="dob"
+                                value="{{ old('dob') }}">
+                            @error('dob')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>

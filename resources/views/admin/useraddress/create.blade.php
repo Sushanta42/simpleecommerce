@@ -71,6 +71,22 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="longitude">Longitude (Optional)</label>
+                            <input id="longitude" class="form-control" type="text" name="longitude"
+                                value="{{ old('longitude') }}">
+                            @error('longitude')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="latitude">Latitude (Optional)</label>
+                            <input id="latitude" class="form-control" type="text" name="latitude"
+                                value="{{ old('latitude') }}">
+                            @error('latitude')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="house_image">Upload House Image</label>
                             <input id="house_image" class="form-control-file" type="file" name="house_image">
                             @error('house_image')

@@ -58,6 +58,22 @@
                                 @endforeach
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label for="coordinate">Coordinate</label>
+                            <input id="coordinate" class="form-control" type="text" name="coordinate"
+                                value="{{ $vendor->coordinate }}">
+                            @error('coordinate')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input id="password" class="form-control" type="text" name="password"
+                               >
+                            @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
 
                         <button type="button" class="btn btn-primary btn-md" data-toggle="modal"

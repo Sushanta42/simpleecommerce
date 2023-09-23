@@ -233,6 +233,9 @@ class ProductApiController extends Controller
     {
         $order = new Order();
         $order->user_id = Auth::user()->id;
+        $order->subtotal = $request->subtotal; // Update to use subtotal from the request
+        $order->discount_amount = $request->discount_amount;
+        $order->coupon_discount = $request->coupon_discount;
         $order->total = $request->total;
         $order->save();
 
@@ -246,27 +249,24 @@ class ProductApiController extends Controller
         }
 
         $carts = Cart::where('user_id', Auth::user()->id)->get();
-        $couponApplied = false;
+        $appliedCoupons = [];
 
         foreach ($carts as $cart) {
-            $cart->delete();
-
             // Check if a coupon was applied to the cart
-            if ($cart->coupon_discount > 0) {
-                $couponApplied = true;
+            if ($cart->coupon_discount > 0 && !in_array($cart->coupon_id, $appliedCoupons)) {
+                $appliedCoupons[] = $cart->coupon_id;
                 // Increment the used count of the coupon
                 $coupon = Coupon::where('id', $cart->coupon_id)->first();
                 $coupon->increment('used');
-            }
-        }
 
-        // Create UserCoupon if a coupon was applied
-        if ($couponApplied) {
-            // $coupon = Coupon::where('code', $request->coupon_code)->first();
-            $userCoupon = new UserCoupon();
-            $userCoupon->user_id = Auth::user()->id;
-            $userCoupon->coupon_id = $cart->coupon_id;
-            $userCoupon->save();
+                // Create UserCoupon if a coupon was applied
+                $userCoupon = new UserCoupon();
+                $userCoupon->user_id = Auth::user()->id;
+                $userCoupon->coupon_id = $cart->coupon_id;
+                $userCoupon->save();
+            }
+
+            $cart->delete();
         }
 
         return response()->json(['success' => true, 'message' => 'Your order has been placed'], 201);

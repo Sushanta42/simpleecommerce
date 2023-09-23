@@ -1,8 +1,8 @@
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html"> <img alt="image" src="/assets/img/logo.png" class="header-logo" />
-                <span class="logo-name">Ecomme</span>
+            <a href="{{ route('admin.dashboard') }}"> <img alt="image" src="/assets/img/logo.png" class="header-logo" />
+                <span class="logo-name">SmartGhau</span>
             </a>
         </div>
         <ul class="sidebar-menu" id="sidebarMenu">
@@ -24,9 +24,9 @@
                     <li><a class="nav-link" href="{{ route('subcategory.index') }}">Sub Category</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
+            {{-- <li class="dropdown">
                 <a href="index.html" class="nav-link"><i data-feather="edit"></i><span>Products</span></a>
-            </li>
+            </li> --}}
             <li class="dropdown {{ request()->is('carousel*') ? 'active' : '' }}">
                 <a href="{{ route('carousel.index') }}" class="nav-link"><i
                         data-feather="image"></i><span>Carousel</span></a>
@@ -40,14 +40,18 @@
                 <a href="{{ route('uservendor.index') }}" class="nav-link"><i
                         data-feather="truck"></i><span>Vendors</span></a>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{ request()->is('userfamily*') ? 'active' : '' }}">
+                <a href="{{ route('userfamily.index') }}" class="nav-link"><i
+                        data-feather="users"></i><span>Users Family</span></a>
+            </li>
+            {{-- <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="flag"></i><span>Sliders</span></a>
                 <ul class="dropdown-menu">
                     <li><a href="carousel.html">Bootstrap Carousel.html</a></li>
                     <li><a class="nav-link" href="owl-carousel.html">Owl Carousel</a></li>
                 </ul>
-            </li>
+            </li> --}}
             <li class="menu-header">Orders</li>
             <li class="dropdown {{ request()->is('order*') ? 'active' : '' }}">
                 <a href="{{ route('order.index') }}" class="nav-link"><i

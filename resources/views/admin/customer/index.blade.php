@@ -45,7 +45,7 @@
                                 <th class="border border-1">Email</th>
                                 <th class="border border-1">Phone</th>
                                 <th class="border border-1">Address</th>
-                                <th class="border border-1">Email Verified At</th>
+                                <th class="border border-1">Date of Birth</th>
                                 <th class="border border-1">Subscription</th>
                                 <th class="border border-1">Created At</th>
                                 <th class="border border-1">Updated At</th>
@@ -58,10 +58,10 @@
                                 <tr>
                                     <td class="border border-1">{{ ++$index }}</td>
                                     <td class="border border-1">{{ $item->name }}</td>
-                                    <td class="border border-1">{{ $item->email }}</td>
+                                    <td class="border border-1">{{ $item->email ?? 'null'}}</td>
                                     <td class="border border-1">{{ $item->phone }}</td>
                                     <td class="border border-1">{{ $item->common_address->name ?? 'null' }}</td>
-                                    <td class="border border-1">{{ $item->email_verified_at }}</td>
+                                    <td class="border border-1">{{ $item->dob ?? 'null' }}</td>
                                     <td class="border border-1">
                                         @if ($item->userSubscriptions->count() > 0)
                                             <span class="badge badge-success">Yes</span>
@@ -77,6 +77,9 @@
                                             @method('delete')
 
                                             <div class="d-flex">
+                                                <a href="{{ route('user.show', $item->id) }}"
+                                                    class="btn btn-warning btn-sm mr-2">View</a>
+
                                                 <a href="{{ route('user.edit', $item->id) }}"
                                                     class="btn btn-info btn-sm mr-2">Edit</a>
 

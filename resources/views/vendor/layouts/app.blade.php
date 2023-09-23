@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>Ecommerce - Vendor Dashboard Template</title>
+    <title>SmartGhau - Vendor Dashboard Template</title>
     <!-- General CSS Files -->
     <link rel="stylesheet" href="/assets/css/app.min.css">
     <link rel="stylesheet" href="/assets/bundles/summernote/summernote-bs4.css">
@@ -51,142 +51,95 @@
                     </ul>
                 </div>
                 <ul class="navbar-nav navbar-right">
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link nav-link-lg message-toggle"><i data-feather="mail"></i>
-                            <span class="badge headerBadge1">
-                                6 </span> </a>
+                    <li class="dropdown dropdown-list-toggle">
+                        <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+                            <i data-feather="mail" class="bell"></i>
+                        </a>
                         <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
                             <div class="dropdown-header">
-                                Messages
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
+                                Product Notifications
                             </div>
-                            <div class="dropdown-list-content dropdown-list-message">
-                                <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar
-											text-white"> <img alt="image"
-                                            src="/assets/img/users/user-1.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">John
-                                            Deo</span>
-                                        <span class="time messege-text">Please check your mail !!</span>
-                                        <span class="time">2 Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="/assets/img/users/user-2.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
-                                            Smith</span> <span class="time messege-text">Request for leave
-                                            application</span>
-                                        <span class="time">5 Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="/assets/img/users/user-5.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Jacob
-                                            Ryan</span> <span class="time messege-text">Your payment invoice is
-                                            generated.</span> <span class="time">12 Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="/assets/img/users/user-4.png" class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Lina
-                                            Smith</span> <span class="time messege-text">hii John, I have upload
-                                            doc
-                                            related to task.</span> <span class="time">30
-                                            Min Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="/assets/img/users/user-3.png"
-                                            class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Jalpa
-                                            Joshi</span> <span class="time messege-text">Please do as specify.
-                                            Let me
-                                            know if you have any query.</span> <span class="time">1
-                                            Days Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-avatar text-white">
-                                        <img alt="image" src="/assets/img/users/user-2.png"
-                                            class="rounded-circle">
-                                    </span> <span class="dropdown-item-desc"> <span class="message-user">Sarah
-                                            Smith</span> <span class="time messege-text">Client Requirements</span>
-                                        <span class="time">2 Days Ago</span>
-                                    </span>
-                                </a>
+                            <div class="dropdown-list-content dropdown-list-icons">
+                                @php
+                                    $vendorId = Auth::user()->id;
+                                    $latestProducts = \App\Models\Product::where('vendor_id', $vendorId)
+                                        ->where('created_at', '>=', now()->subDays(200))
+                                        ->orderBy('created_at', 'desc')
+                                        ->get();
+                                @endphp
+
+                                @if ($latestProducts->isEmpty())
+                                    <p class="dropdown-item">No products added in the last 200 days</p>
+                                @else
+                                    @foreach ($latestProducts as $product)
+                                        <a href="{{ route('product.show', $product->id) }}"
+                                            class="dropdown-item dropdown-item-unread">
+                                            <span class="dropdown-item-icon bg-primary text-white">
+                                                <i class="fas fa-code"></i>
+                                            </span>
+                                            <span class="dropdown-item-desc">
+                                                Latest Added Product: <b>{{ $product->name }}</b>
+                                                <span class="time">{{ $product->created_at->diffForHumans() }}</span>
+                                            </span>
+                                        </a>
+                                    @endforeach
+                                @endif
                             </div>
                             <div class="dropdown-footer text-center">
-                                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+                                <a href="{{ route('product.index') }}">View All Products <i
+                                        class="fas fa-chevron-right"></i></a>
                             </div>
                         </div>
                     </li>
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown"
-                            class="nav-link notification-toggle nav-link-lg"><i data-feather="bell"
-                                class="bell"></i>
+                    <li class="dropdown dropdown-list-toggle">
+                        <a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
+                            <i data-feather="bell" class="bell"></i>
                         </a>
                         <div class="dropdown-menu dropdown-list dropdown-menu-right pullDown">
                             <div class="dropdown-header">
                                 Notifications
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
                             </div>
                             <div class="dropdown-list-content dropdown-list-icons">
-                                <a href="#" class="dropdown-item dropdown-item-unread"> <span
-                                        class="dropdown-item-icon bg-primary text-white"> <i
-                                            class="fas
-												fa-code"></i>
-                                    </span> <span class="dropdown-item-desc"> Template update is
-                                        available now! <span class="time">2 Min
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-info text-white"> <i
-                                            class="far
-												fa-user"></i>
-                                    </span> <span class="dropdown-item-desc"> <b>You</b> and <b>Dedik
-                                            Sugiharto</b> are now friends <span class="time">10 Hours
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-success text-white"> <i
-                                            class="fas
-												fa-check"></i>
-                                    </span> <span class="dropdown-item-desc"> <b>Kusnaedi</b> has
-                                        moved task <b>Fix bug header</b> to <b>Done</b> <span class="time">12
-                                            Hours
-                                            Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-danger text-white"> <i
-                                            class="fas fa-exclamation-triangle"></i>
-                                    </span> <span class="dropdown-item-desc"> Low disk space. Let's
-                                        clean it! <span class="time">17 Hours Ago</span>
-                                    </span>
-                                </a> <a href="#" class="dropdown-item"> <span
-                                        class="dropdown-item-icon bg-info text-white"> <i
-                                            class="fas
-												fa-bell"></i>
-                                    </span> <span class="dropdown-item-desc"> Welcome to Otika
-                                        template! <span class="time">Yesterday</span>
-                                    </span>
-                                </a>
+                                @php
+                                    $vendorId = Auth::user()->id; // Assuming you have a vendor relationship in your User model
+                                    $latestUpdatedProducts = \App\Models\Product::where('vendor_id', $vendorId)
+                                        ->where('updated_at', '>=', now()->subDays(10))
+                                        ->orderBy('updated_at', 'desc')
+                                        ->get();
+                                @endphp
+                                @if ($latestUpdatedProducts->isEmpty())
+                                    <p class="dropdown-item">No products updated in the last 10 days</p>
+                                @else
+                                    @foreach ($latestUpdatedProducts as $product)
+                                        <a href="{{ route('product.show', $product->id) }}"
+                                            class="dropdown-item dropdown-item-unread">
+                                            <span class="dropdown-item-icon bg-primary text-white">
+                                                <i class="fas fa-code"></i>
+                                            </span>
+                                            <span class="dropdown-item-desc">
+                                                Latest Updated Product: <b>{{ $product->name }}</b>
+                                                <span class="time">{{ $product->updated_at->diffForHumans() }}</span>
+                                            </span>
+                                        </a>
+                                    @endforeach
+                                @endif
                             </div>
                             <div class="dropdown-footer text-center">
-                                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
+                                <a href="{{ route('product.index') }}">View All Products <i
+                                        class="fas fa-chevron-right"></i></a>
                             </div>
                         </div>
                     </li>
+
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                             class="nav-link dropdown-toggle nav-link-lg nav-link-user"> <img alt="image"
                                 src="/assets/img/user.png" class="user-img-radious-style"> <span
                                 class="d-sm-none d-lg-inline-block"></span></a>
                         <div class="dropdown-menu dropdown-menu-right pullDown">
                             <div class="dropdown-title">Hello {{ Auth::user()->name }}</div>
-                            <a href="profile.html" class="dropdown-item has-icon"> <i
-                                    class="far
-										fa-user"></i> Profile
+                            <a href="profile.html" class="dropdown-item has-icon"> <i class="far
+										fa-user"></i>
+                                Profile
                             </a> <a href="timeline.html" class="dropdown-item has-icon"> <i class="fas fa-bolt"></i>
                                 Activities
                             </a> <a href="#" class="dropdown-item has-icon"> <i class="fas fa-cog"></i>
@@ -262,6 +215,18 @@
             var discount = document.getElementById('discount_percent').value;
             var sp = price - (discount * price) / 100;
             document.getElementById('sale_price').value = sp;
+        }
+
+        function calculateDiscount() {
+            var price = parseFloat(document.getElementById('price').value);
+            var sp = parseFloat(document.getElementById('sale_price').value);
+
+            if (!isNaN(price) && !isNaN(sp)) {
+                var discount = ((price - sp) / price) * 100;
+                document.getElementById('discount_percent').value = discount.toFixed(2);
+            } else {
+                alert("Please enter valid numeric values for Price and Selling Price.");
+            }
         }
     </script>
 

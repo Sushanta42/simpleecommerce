@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AboutUsController;
+use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommonAddressController;
@@ -85,6 +86,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('aboutus', AboutUsController::class);
     Route::resource('terms', TermController::class);
 
+    // Add this route to clear the cache
+    Route::get('/admin/clear-cache', [CacheController::class, 'clearCache'])
+        ->name('admin.clear.cache');
 });
 
 require __DIR__ . '/adminauth.php';

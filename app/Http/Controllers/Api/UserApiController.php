@@ -20,19 +20,26 @@ class UserApiController extends Controller
         try {
             $data = Validator::make($request->all(), [
                 'name' => 'required',
-                'email' => 'required|unique:users,email',
+                'email' => 'unique:users,email',
                 'phone' => 'required|unique:users,phone',
                 'password' => 'required'
             ]);
             if ($data->fails()) {
                 return response()->json(['message' => $data->messages()], 400);
             } else {
+                // Find the oldest common address
+                $oldestCommonAddress = CommonAddress::oldest()->first();
+
+                if (!$oldestCommonAddress) {
+                    return response()->json(['message' => 'No common addresses available.'], 400);
+                }
+
                 $user = new User();
                 $user->name = $request->name;
-                $user->email = $request->email;
+                // $user->email = $request->email;
                 $user->phone = $request->phone;
                 $user->password = Hash::make($request->password);
-                $user->common_address_id = $request->common_address_id; // Link user to common address
+                $user->common_address_id = $oldestCommonAddress->id; // Link user to the oldest common address
                 $user->save();
             }
             return response()->json(['message' => 'Registration Successful', 'success' => true], 201);
@@ -45,16 +52,16 @@ class UserApiController extends Controller
     public function loginUser(Request $request)
     {
         $data = Validator::make($request->all(), [
-            'email' => 'required',
+            'phone' => 'required',
             'password' => 'required',
         ]);
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('phone', $request->phone)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['success' => false, 'message' => 'Invalid email or password']);
+            return response()->json(['success' => false, 'message' => 'Invalid phone or password']);
         }
 
-        $token = $user->createToken($request->email)->plainTextToken;
+        $token = $user->createToken($request->phone)->plainTextToken;
         return response()->json(['success' => true, 'token' => $token, 'user' => $user], 200);
     }
 

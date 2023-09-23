@@ -42,6 +42,7 @@ class VendorController extends Controller
             'email' => 'required|email|unique:vendors,email',
             'phone' => 'required|unique:vendors,phone',
             'password' => 'required|min:8',
+            'common_address_id' => 'required',
         ]);
 
         try {
@@ -50,6 +51,7 @@ class VendorController extends Controller
             $vendor->name = $request->input('name');
             $vendor->email = $request->input('email');
             $vendor->phone = $request->input('phone');
+            $vendor->coordinate = $request->input('coordinate');
             $vendor->common_address_id = $request->common_address_id;
             $vendor->password = bcrypt($request->input('password'));
 
@@ -97,8 +99,12 @@ class VendorController extends Controller
             $vendor->name = $request->name;
             $vendor->email = $request->email;
             $vendor->phone = $request->phone;
+            $vendor->coordinate = $request->coordinate;
             $vendor->common_address_id = $request->common_address_id;
-
+            // Check if a new password is provided, if not, retain the old password
+            if (!empty($request->password)) {
+                $vendor->password = bcrypt($request->password);
+            }
             $vendor->update();
             Session::flash('success', 'Vendor updated successfully!'); // Add success message to flash session
             return redirect()->route('uservendor.index');
