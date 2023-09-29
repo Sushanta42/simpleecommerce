@@ -19,11 +19,11 @@ class SubscriptionResource extends JsonResource
             "id" => $this->id,
             "name" => $this->name,
             "description" => $this->description,
-            "price" => $this->price,
-            "duration" => $this->duration,
+            "price" => (float) $this->price,
+            "duration" => (int) $this->duration,
             "type" => $this->type,
             "plan" => $this->plan,
-            "active" => $this->active,
+            "active" => (int) $this->active,
         ];
     }
 }

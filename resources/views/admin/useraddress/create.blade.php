@@ -23,12 +23,16 @@
                     <form action="{{ route('useraddress.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="user_id">User Name</label>
-                            <select id="user_id" class="form-control" name="user_id">
+                            <label for="user_id">User Phone</label>
+                            <select id="user_id" class="form-control" name="user_id" value="{{ old('user_id') }}">
+                                <option value="">Select User Number</option>
                                 @foreach ($users as $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->phone }}</option>
                                 @endforeach
                             </select>
+                            @error('user_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="municipality">Municipality</label>

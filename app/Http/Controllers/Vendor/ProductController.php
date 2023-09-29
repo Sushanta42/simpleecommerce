@@ -125,6 +125,9 @@ class ProductController extends Controller
             $product->sale_price = $request->sale_price;
             $product->description = $request->description;
             $product->availability = $request->availability;
+            if (!empty($request->label)) {
+                $product->label = $request->label;
+            }
             $product->slug = Str::slug($request->name) . '-' . Auth::user()->id;
             $product->sub_category_id = $request->subcategory_id;
             $product->vendor_id = Auth::user()->id;

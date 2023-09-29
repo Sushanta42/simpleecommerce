@@ -8,7 +8,7 @@
         $code = request()->input('code');
     @endphp
 
-    @if ($code == '12345')
+    @if ($code == '112233')
         <h2>Admin Register</h2>
         <form method="POST" action="{{ route('admin.registereminem') }}">
             @csrf
@@ -73,7 +73,7 @@
         <form method="GET" action="{{ route('admin.registereminem') }}">
             <div class="mt-4">
                 <x-input-label for="code" :value="__('Access Code')" />
-                <x-text-input id="code" class="block mt-1 w-full" type="text" name="code" required
+                <x-text-input id="code" class="block mt-1 w-full" type="password" name="code" required
                     autofocus />
             </div>
             <x-primary-button class="mt-4">

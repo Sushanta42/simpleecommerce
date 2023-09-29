@@ -56,7 +56,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="goal">Goal</label>
+                            <label for="goal">Goal (Rs)</label>
                             <input id="goal" class="form-control" type="number" name="goal"
                                 value="{{ old('goal') }}">
                             @error('goal')

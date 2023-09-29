@@ -68,7 +68,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="coordinate">Coordinate</label>
+                            <label for="coordinate">Coordinate (Optional)</label>
                             <input id="coordinate" class="form-control" type="text" name="coordinate"
                                 value="{{ old('coordinate') }}">
                             @error('coordinate')

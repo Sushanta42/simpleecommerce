@@ -35,6 +35,7 @@ class UserAddressController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_id' => 'required',
             'municipality' => 'required|max:255', // Add validation rules for municipality field
             'city' => 'required|max:255', // Add validation rules for city field
             'ward' => 'required|max:255', // Add validation rules for ward field
@@ -42,6 +43,9 @@ class UserAddressController extends Controller
             'coordinate' => 'required|max:255', // Add validation rules for coordinate field
             'house_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
             'road_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
+            'latitude' => 'nullable|numeric', // 'nullable' allows the field to be optional
+            'longitude' => 'nullable|numeric', // 'nullable' allows the field to be optional
+
         ], [
             'municipality.required' => 'The Address municipality field is required.', // Custom error message for name field
             'city.required' => 'The Address city field is required.', // Custom error message for name field
@@ -116,6 +120,8 @@ class UserAddressController extends Controller
             'coordinate' => 'required|max:255', // Add validation rules for coordinate field
             'house_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
             'road_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
+            'latitude' => 'nullable|numeric', // 'nullable' allows the field to be optional
+            'longitude' => 'nullable|numeric', // 'nullable' allows the field to be optional
         ], [
             'municipality.required' => 'The Address municipality field is required.', // Custom error message for name field
             'city.required' => 'The Address city field is required.', // Custom error message for name field

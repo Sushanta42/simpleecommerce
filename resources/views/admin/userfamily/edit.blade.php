@@ -17,58 +17,55 @@
             @endif
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <a href="{{ route('user.index') }}" class="btn btn-primary btn-sm">Back</a>
-                    <h4>Edit User</h4>
+                    <a href="{{ route('userfamily.index') }}" class="btn btn-primary btn-sm">Back</a>
+                    <h4>Edit User Family Details</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('user.update', $user->id) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('userfamily.update', $userfamily->id) }}" method="post"
+                        enctype="multipart/form-data">
                         @csrf
                         @method('put')
                         <div class="form-group">
+                            <label for="user_id">User Number</label>
+                            <select id="user_id" class="form-control" name="user_id">
+                                @foreach ($users as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if ($userfamily->user_id == $item->id) selected @endif>{{ $item->phone }}</option>
+                                @endforeach
+                            </select>
+                            @error('user_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="name">Name</label>
                             <input id="name" class="form-control" type="text" name="name"
-                                value="{{ $user->name }}">
+                                value="{{ $userfamily->name }}">
                             @error('name')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input id="email" class="form-control" type="email" name="email"
-                                value="{{ $user->email }}">
-                            @error('email')
+                            <label for="mobile">Mobile</label>
+                            <input id="mobile" class="form-control" type="number" name="mobile"
+                                value="{{ $userfamily->mobile }}">
+                            @error('mobile')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="phone">Phone</label>
+                            <label for="phone">Phone (Optional)</label>
                             <input id="phone" class="form-control" type="number" name="phone"
-                                value="{{ $user->phone }}">
+                                value="{{ $userfamily->phone }}">
                             @error('phone')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="common_address_id">Common Address</label>
-                            <select id="common_address_id" class="form-control" name="common_address_id">
-                                @foreach ($commonaddresses as $item)
-                                    <option value="{{ $item->id }}"
-                                        @if ($user->common_address_id == $item->id) selected @endif>{{ $item->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="dob">Date of Birth: {{ $user->dob }}</label>
+                            <label for="dob">Date of Birth: {{ $userfamily->dob }}</label>
                             <input id="dob" class="form-control" type="date" name="dob"
-                                value="{{ $user->dob }}">
+                                value="{{ $userfamily->dob }}">
                             @error('dob')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Remarks (Optional)</label>
-                            <textarea id="description" class="summernote" name="description" rows="4">{{ $user->description }}</textarea>
-                            @error('description')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
@@ -90,14 +87,10 @@
                                     <div class="modal-body">
                                         <!-- Add your modal body content here -->
                                         <p>Are you sure you want to update this user?</p>
-                                        <p><strong>Old Name:</strong> {{ $user->name }}</p>
+                                        <p><strong>Old Name:</strong> {{ $userfamily->name }}</p>
                                         <p><strong>Updated Name:</strong> <span id="updatedUserName"></span></p>
-                                        <p><strong>Old Email:</strong> {{ $user->email }}</p>
-                                        <p><strong>Updated Email:</strong> <span id="updatedUserEmail"></span></p>
-                                        <p><strong>Old Phone:</strong> {{ $user->phone }}</p>
+                                        <p><strong>Old Phone:</strong> {{ $userfamily->mobile }}</p>
                                         <p><strong>Updated Phone:</strong> <span id="updatedUserPhone"></span></p>
-                                        {{-- <p><strong>Old Address:</strong> {{ $user->common_address->name }}</p>
-                                        <p><strong>Updated Address:</strong> <span id="updatedAddress"></span> --}}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
@@ -117,19 +110,9 @@
         document.getElementById('name').addEventListener('input', function() {
             document.getElementById('updatedUserName').textContent = this.value;
         });
-        document.getElementById('email').addEventListener('input', function() {
-            document.getElementById('updatedUserEmail').textContent = this.value;
-        });
 
         document.getElementById('phone').addEventListener('input', function() {
             document.getElementById('updatedUserPhone').textContent = this.value;
         });
-
-        // // Update the modal body with the selected address name
-        // document.getElementById('common_address_id').addEventListener('change', function() {
-        //     var addressSelect = document.getElementById('common_address_id');
-        //     var selectedAddress = addressSelect.options[addressSelect.selectedIndex].text;
-        //     document.getElementById('updatedAddress').textContent = selectedAddress;
-        // });
     </script>
 </x-admin-layout>

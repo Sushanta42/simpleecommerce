@@ -126,8 +126,8 @@ class ProductApiController extends Controller
 
         $itemTotal = $carts->sum('itemTotal');
         $discountAmount = $carts->sum('itemTotal') - $carts->sum('amount');
-        $totalAmount = $carts->first()->total_amount;
-        $couponDiscount = $carts->first()->coupon_discount;
+        $totalAmount = (float) $carts->first()->total_amount;
+        $couponDiscount = (float) $carts->first()->coupon_discount;
 
         // Check if the coupon amount is greater than the total amount
         if ($couponDiscount > $totalAmount) {

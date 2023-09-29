@@ -62,7 +62,7 @@
                 <a href="{{ route('commonaddress.index') }}" class="nav-link"><i data-feather="copy"></i><span>Common
                         Address</span></a>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{ request()->is('useraddress*') ? 'active' : '' }}">
                 <a href="{{ route('useraddress.index') }}" class="nav-link"><i data-feather="map-pin"></i><span>User
                         Address</span></a>
             </li>

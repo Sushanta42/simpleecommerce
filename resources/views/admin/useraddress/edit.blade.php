@@ -26,11 +26,11 @@
                         @csrf
                         @method('put')
                         <div class="form-group">
-                            <label for="user_id">User Name</label>
+                            <label for="user_id">User Phone</label>
                             <select id="user_id" class="form-control" name="user_id">
                                 @foreach ($users as $item)
                                     <option value="{{ $item->id }}"
-                                        @if ($useraddress->user_id == $item->id) selected @endif>{{ $item->name }}</option>
+                                        @if ($useraddress->user_id == $item->id) selected @endif>{{ $item->phone }}</option>
                                 @endforeach
                             </select>
                         </div>

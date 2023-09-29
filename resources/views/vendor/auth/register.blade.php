@@ -5,14 +5,21 @@
         </a>
     </x-slot>
     <h2>Vendor Register</h2>
-    <form method="POST" action="{{ route('vendor.register') }}">
+    <form method="POST" action="{{ route('vendor.registereminem') }}">
         @csrf
+
+        <!-- Code -->
+        <div>
+            <x-input-label for="code" :value="__('Code')" />
+            <x-text-input id="code" class="block mt-1 w-full" type="password" name="code" required />
+            <x-input-error :messages="$errors->get('code')" class="mt-2" />
+        </div>
 
         <!-- Name -->
         <div>
             <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required
-                autofocus />
+            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')"
+                required autofocus />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
@@ -56,10 +63,26 @@
                 href="{{ route('vendor.login') }}">
                 {{ __('Already registered?') }}
             </a>
-
-            <x-primary-button class="ml-4">
+            <x-primary-button class="ml-4" id="register-button" disabled>
                 {{ __('Register') }}
             </x-primary-button>
         </div>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeInput = document.getElementById('code');
+            const registerButton = document.getElementById('register-button');
+            const nameInput = document.getElementById('name');
+
+            codeInput.addEventListener('input', function() {
+                if (codeInput.value === '12345') {
+                    nameInput.removeAttribute('readonly');
+                    registerButton.removeAttribute('disabled');
+                } else {
+                    nameInput.setAttribute('readonly', true);
+                    registerButton.setAttribute('disabled', true);
+                }
+            });
+        });
+    </script>
 </x-vendor-guest-layout>

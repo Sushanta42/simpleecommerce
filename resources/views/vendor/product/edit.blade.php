@@ -92,6 +92,25 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="code">Enter Code to Update Label:</label>
+                            <input id="code" class="form-control" type="password" name="code">
+                            @error('code')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="label">Label</label>
+                            <select id="label" class="form-control" name="label" disabled>
+                                <option value="hot" {{ $product->label == 'hot' ? 'selected' : '' }}>Hot</option>
+                                <option value="sale" {{ $product->label == 'sale' ? 'selected' : '' }}>Sale</option>
+                                <option value="new" {{ $product->label == 'new' ? 'selected' : '' }}>New</option>
+                            </select>
+                            @error('label')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
                             <label for="image">Upload Image</label>
                             <input id="image" class="form-control-file" type="file" name="image">
                             @error('image')
@@ -108,3 +127,23 @@
         </div>
     </section>
 </x-vendor-layout>
+
+<script>
+    // Function to enable the "label" field when the correct code is entered
+    function enableLabelField() {
+        var codeInput = document.getElementById('code');
+        var labelSelect = document.getElementById('label');
+
+        codeInput.addEventListener('input', function() {
+            if (codeInput.value === '112233') {
+                labelSelect.removeAttribute('disabled');
+            } else {
+                labelSelect.setAttribute('disabled', 'disabled');
+            }
+        });
+    }
+
+    // Call the function to enable the "label" field
+    enableLabelField();
+</script>
+

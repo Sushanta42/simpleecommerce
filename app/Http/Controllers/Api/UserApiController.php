@@ -36,7 +36,7 @@ class UserApiController extends Controller
 
                 $user = new User();
                 $user->name = $request->name;
-                // $user->email = $request->email;
+                $user->email = $request->email;
                 $user->phone = $request->phone;
                 $user->password = Hash::make($request->password);
                 $user->common_address_id = $oldestCommonAddress->id; // Link user to the oldest common address

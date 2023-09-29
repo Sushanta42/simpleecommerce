@@ -30,10 +30,17 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="availability">Availability</label>
+                                <label for="availability">Availability:</label>
                                 <div class="form-control-static" id="availability"
                                     style="border: 1px solid #c8c4c4; padding: 10px;">
                                     {{ $product->availability }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="label">Label:</label>
+                                <div class="form-control-static" id="label"
+                                    style="border: 1px solid #c8c4c4; padding: 10px;">
+                                    {{ $product->label }}
                                 </div>
                             </div>
                         </div>

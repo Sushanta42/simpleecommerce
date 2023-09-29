@@ -1,7 +1,7 @@
 <x-vendor-layout>
     <section>
         <div class="container">
-            {{-- @if (Session::has('success') || Session::has('error'))
+            @if (Session::has('success') || Session::has('error'))
                 <div class="alert alert-{{ Session::has('success') ? 'success' : 'danger' }} alert-dismissible fade show"
                     role="alert">
                     {{ Session::has('success') ? Session::get('success') : Session::get('error') }}
@@ -14,7 +14,7 @@
                         $('.alert').alert('close');
                     }, 3000); // Close the alert after 3 seconds (3000 milliseconds)
                 </script>
-            @endif --}}
+            @endif
 
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">

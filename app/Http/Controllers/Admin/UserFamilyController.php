@@ -35,6 +35,7 @@ class UserFamilyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_id' => 'required',
             'name' => 'required',
             'mobile' => 'required|unique:users,phone',
             'dob' => 'required',
@@ -71,8 +72,9 @@ class UserFamilyController extends Controller
      */
     public function edit(string $id)
     {
-        $users = User::find($id);
-        return view('admin.userfamily.edit', compact('users'));
+        $userfamily = Family::find($id);
+        $users = User::all();
+        return view('admin.userfamily.edit', compact('users', 'userfamily'));
     }
 
     /**

@@ -31,11 +31,11 @@ class UserSubscriptionResource extends JsonResource
             "id" => $this->id,
             "subscription_id" => $this->subscription->id,
             "plan_name" => $this->subscription->name,
-            "price" => $this->subscription->price,
+            "price" => (float) $this->subscription->price,
             "start_date" => $this->start_date,
             "end_date" => $this->end_date,
             "status" => $this->status,
-            "paid" => $this->paid,
+            "paid" => (int) $this->paid,
             "remaining_days" => $remainingDays,
         ];
     }
