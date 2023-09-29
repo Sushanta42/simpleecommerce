@@ -20,7 +20,7 @@ class UserApiController extends Controller
         try {
             $data = Validator::make($request->all(), [
                 'name' => 'required',
-                'email' => 'unique:users,email',
+                'email' => 'nullable|unique:users,email',
                 'phone' => 'required|unique:users,phone',
                 'password' => 'required'
             ]);
