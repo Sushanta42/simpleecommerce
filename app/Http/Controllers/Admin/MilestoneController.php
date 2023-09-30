@@ -33,14 +33,14 @@ class MilestoneController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:subscriptions,name|max:255', // Add validation rules for name field
+            'name' => 'required|unique:milestones,name|max:255', // Add validation rules for name field
             'goal' => 'required|numeric',
             'duration' => 'required',
             'plan' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
             'status' => 'required',
         ], [
-            'name.required' => 'The Subscription name field is required.', // Custom error message for name field
+            'name.required' => 'The milestones name field is required.', // Custom error message for name field
             'goal.required' => 'The Goal field is required.', // Custom error message for price field
             'duration.required' => 'The duration field is required.', // Custom error message for duration field
             'plan.required' => 'The plan field is required.', // Custom error message for plan field
@@ -95,14 +95,14 @@ class MilestoneController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|unique:subscriptions,name|max:255', // Add validation rules for name field
+            'name' => 'required|unique:milestones,name|max:255', // Add validation rules for name field
             'goal' => 'required|numeric',
             'duration' => 'required',
             'plan' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
             'status' => 'required',
         ], [
-            'name.required' => 'The Subscription name field is required.', // Custom error message for name field
+            'name.required' => 'The milestones name field is required.', // Custom error message for name field
             'goal.required' => 'The Goal field is required.', // Custom error message for price field
             'duration.required' => 'The duration field is required.', // Custom error message for duration field
             'plan.required' => 'The plan field is required.', // Custom error message for plan field

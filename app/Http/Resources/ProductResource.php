@@ -32,7 +32,7 @@ class ProductResource extends JsonResource
             "sale_price" => $salePrice,
             "availability" => $this->availability,
             "label" => $this->label,
-            "vendor_id" => $this->vendor_id,
+            "vendor_id" => (int) $this->vendor_id,
         ];
     }
 }
