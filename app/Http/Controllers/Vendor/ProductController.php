@@ -160,7 +160,7 @@ class ProductController extends Controller
                 unlink($file);
             }
             $product->delete();
-            return redirect()->route('poduct.index')->with('error', 'Product deleted successfully.');
+            return redirect()->route('product.index')->with('error', 'Product deleted successfully.');
         } catch (\Exception $e) {
             // Handle the exception and show error message
             return redirect()->back()->with('error', 'Failed to delete product');
