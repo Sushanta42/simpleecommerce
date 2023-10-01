@@ -208,12 +208,14 @@
         });
     </script>
 
-    <!--Script to calculate selling price -->
+    <!-- Script to calculate selling price -->
     <script>
         function calculate() {
             var price = document.getElementById('price').value;
             var discount = document.getElementById('discount_percent').value;
             var sp = price - (discount * price) / 100;
+            var roundedDiscount = Math.ceil(parseFloat(discount)); // Round up the discount percent
+            document.getElementById('discount_percent').value = roundedDiscount;
             document.getElementById('sale_price').value = sp;
         }
 
@@ -223,12 +225,14 @@
 
             if (!isNaN(price) && !isNaN(sp)) {
                 var discount = ((price - sp) / price) * 100;
-                document.getElementById('discount_percent').value = discount.toFixed(2);
+                var roundedDiscount = Math.ceil(discount); // Round up the discount percent
+                document.getElementById('discount_percent').value = roundedDiscount.toFixed(2);
             } else {
                 alert("Please enter valid numeric values for Price and Selling Price.");
             }
         }
     </script>
+
 
 </body>
 

@@ -61,7 +61,7 @@
                         </div>
                         <div class="form-group">
                             <label for="sale_price">Selling Price (Rs)</label>
-                            <input id="sale_price" class="form-control" type="sale_price" name="sale_price"
+                            <input id="sale_price" class="form-control" type="number" name="sale_price"
                                 oninput="calculateDiscount()" value="{{ old('sale_price') }}">
                             @error('sale_price')
                                 <div class="text-danger">{{ $message }}</div>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group">
                             <label for="discount_percent">Discount Percent (%)</label>
-                            <input id="discount_percent" class="form-control" type="discount_percent"
+                            <input id="discount_percent" class="form-control" type="number"
                                 name="discount_percent" oninput="calculate()"
                                 value="{{ old('discount_percent') ?? 0 }}">
                             @error('discount_percent')

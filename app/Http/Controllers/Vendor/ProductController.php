@@ -40,6 +40,7 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'sale_price' => 'required|numeric|lte:price',
             'subcategory_id' => 'required',
+            'discount_percent' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
         ], [
             'name.required' => 'The Product name field is required.', // Custom error message for name field
@@ -47,6 +48,7 @@ class ProductController extends Controller
             'sale_price.required' => 'The Selling price field is required.', // Custom error message for price field
             'sale_price.lte' => 'The Selling price must be equal to or less than the regular price.', // Custom error message for sale_price validation
             'subcategory_id.required' => 'The SubCategory field is required.', // Custom error message for price field
+            'discount_percent.required' => 'The discount percent field is required.', // Custom error message for price field
             'image.required' => 'The image field is required.', // Custom error message for image field
             'image.image' => 'The file must be an image.', // Custom error message for image file type
             'image.mimes' => 'The file must be a jpeg, png, jpg, or gif image.', // Custom error message for image file type
@@ -113,6 +115,7 @@ class ProductController extends Controller
             'price.required' => 'The price field is required.', // Custom error message for price field
             'sale_price.required' => 'The Selling price field is required.', // Custom error message for price field
             'sale_price.lte' => 'The Selling price must be equal to or less than the regular price.', // Custom error message for sale_price validation
+            'discount_percent.required' => 'The discount percent field is required.', // Custom error message for price field
             'image.image' => 'The file must be an image.', // Custom error message for image file type
             'image.mimes' => 'The file must be a jpeg, png, jpg, or gif image.', // Custom error message for image file type
             'image.max' => 'The image may not be greater than 2MB.', // Custom error message for image file size
