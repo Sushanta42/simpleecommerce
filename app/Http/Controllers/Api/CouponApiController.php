@@ -33,7 +33,9 @@ class CouponApiController extends Controller
             return response()->json(['success' => false, 'message' => 'Coupon has reached its maximum uses'], 400);
         }
 
-        if ($coupon->user_id !== null && $coupon->user_id !== Auth::user()->id) {
+        // Check if the coupon is valid for the current user
+        $validUserIds = $coupon->user_id ? explode(',', $coupon->user_id) : [];
+        if (!empty($validUserIds) && !in_array(Auth::user()->id, $validUserIds)) {
             return response()->json(['success' => false, 'message' => 'This coupon is not valid for the current user'], 400);
         }
 

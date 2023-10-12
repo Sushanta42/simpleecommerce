@@ -66,6 +66,13 @@ class ProductApiController extends Controller
         $quantity = $request->quantity;
         $user = Auth::user();
 
+        // Check if the product is out of stock
+        $product = Product::find($productId);
+
+        if (!$product || $product->availability === 'out_of_stock') {
+            return response()->json(['success' => false, 'message' => 'Product is out of stock'], 400);
+        }
+
         $cart = Cart::where('user_id', $user->id)
             ->where('product_id', $productId)
             ->first();
@@ -92,10 +99,11 @@ class ProductApiController extends Controller
         $totalAmount = $carts->sum('amount') - $couponDiscount;
 
         // Check if the coupon amount is greater than the updated total amount
-        if ($request->coupon_amount > $totalAmount) {
+        if ($couponDiscount > $carts->sum('amount')) {
             // Remove the coupon
             $couponDiscount = 0;
             $couponId = null;
+            $totalAmount = $carts->sum('amount');
         }
 
         foreach ($carts as $cartItem) {
@@ -130,10 +138,10 @@ class ProductApiController extends Controller
         $couponDiscount = (float) $carts->first()->coupon_discount;
 
         // Check if the coupon amount is greater than the total amount
-        if ($couponDiscount > $totalAmount) {
+        if ($couponDiscount > $carts->sum('amount')) {
             // Remove the coupon
             $couponDiscount = 0;
-            $totalAmount = $itemTotal; // Reset the total amount without the coupon
+            $totalAmount = $carts->sum('amount'); // Reset the total amount without the coupon
         }
 
         return response()->json([
@@ -169,10 +177,11 @@ class ProductApiController extends Controller
         $totalAmount = $carts->sum('amount') - $couponDiscount;
 
         // Check if the coupon amount is greater than the updated total amount
-        if ($request->coupon_amount > $totalAmount) {
+        if ($couponDiscount > $carts->sum('amount')) {
             // Remove the coupon
             $couponDiscount = 0;
             $couponId = null;
+            $totalAmount = $carts->sum('amount');
         }
 
         foreach ($carts as $cartItem) {
@@ -208,7 +217,7 @@ class ProductApiController extends Controller
         $totalAmount = $carts->sum('amount') - $couponDiscount;
 
         // Check if the coupon amount is greater than the updated total amount
-        if ($couponDiscount > $totalAmount) {
+        if ($couponDiscount > $carts->sum('amount')) {
             // Remove the coupon
             $couponDiscount = 0;
             $couponId = null;
@@ -336,7 +345,7 @@ class ProductApiController extends Controller
     public function getHotProducts()
     {
         try {
-            $products = Product::where('label', 'hot')->get();
+            $products = Product::where('label', 'hot')->orderBy('updated_at', 'desc')->get();
             return ProductResource::collection($products);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving hot products'], 500);
@@ -358,7 +367,7 @@ class ProductApiController extends Controller
     public function getSaleProducts()
     {
         try {
-            $products = Product::where('label', 'sale')->get();
+            $products = Product::where('label', 'sale')->orderBy('updated_at', 'desc')->get();
             return ProductResource::collection($products);
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => 'An error occurred while retrieving sale products'], 500);
@@ -380,6 +389,7 @@ class ProductApiController extends Controller
                 ->whereHas('vendor', function ($query) use ($common_address_id) {
                     $query->where('common_address_id', $common_address_id);
                 })
+                ->orderBy('updated_at', 'desc') // Order by the latest updated_at timestamp
                 ->get();
 
             return ProductResource::collection($products);
@@ -403,6 +413,7 @@ class ProductApiController extends Controller
                 ->whereHas('vendor', function ($query) use ($common_address_id) {
                     $query->where('common_address_id', $common_address_id);
                 })
+                ->orderBy('updated_at', 'desc') // Order by the latest updated_at timestamp
                 ->get();
 
             return ProductResource::collection($products);
