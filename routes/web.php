@@ -23,6 +23,8 @@ use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\Vendor\ProductController;
+use App\Models\PrivacyPolicy;
+use App\Models\Term;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +40,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/privacypolicysmartgau', function () {
+    $privacyPolicy = PrivacyPolicy::latest()->first(); // Fetch the latest privacy policy
+    return view('privacy', compact('privacyPolicy'));
+});
+
+Route::get('/termsandconditionsmartgau', function () {
+    $termCondition = Term::latest()->first(); // Fetch the latest privacy policy
+    return view('term', compact('termCondition'));
 });
 
 Route::get('/dashboard', function () {
