@@ -18,11 +18,13 @@ class SubCategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $subcategories = SubCategory::query()
-            ->where('name', 'LIKE', "%{$search}%")
-            ->get();
+        $subcategories = SubCategory::all();
         return view('admin.subcategory.index', compact('subcategories'));
+        // $search = $request->input('search');
+        // $subcategories = SubCategory::query()
+        //     ->where('name', 'LIKE', "%{$search}%")
+        //     ->get();
+        // return view('admin.subcategory.index', compact('subcategories'));
     }
 
     /**
@@ -122,19 +124,46 @@ class SubCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(string $id)
+    // {
+    //     try {
+    //         $subcategory = SubCategory::findOrFail($id);
+    //         $file = public_path($subcategory->image);
+    //         if (file_exists($file)) {
+    //             unlink($file);
+    //         }
+    //         $subcategory->delete();
+    //         return redirect()->route('subcategory.index')->with('error', 'SubCategory deleted successfully.');
+    //     } catch (\Exception $e) {
+    //         // Handle the exception and show error message
+    //         return redirect()->back()->with('error', 'Failed to delete subcategory');
+    //     }
+    // }
     public function destroy(string $id)
     {
         try {
             $subcategory = SubCategory::findOrFail($id);
+
+            // Check if the subcategory has related products
+            if ($subcategory->products()->exists()) {
+                return redirect()->back()->with('error', 'Failed to delete subcategory due to its relation in products');
+            }
+
+            // Get the file path and delete the image only if subcategory is deleted
             $file = public_path($subcategory->image);
+
+            // Delete the subcategory first
+            $subcategory->delete();
+
+            // Delete the image file only if subcategory deletion was successful
             if (file_exists($file)) {
                 unlink($file);
             }
-            $subcategory->delete();
-            return redirect()->route('subcategory.index')->with('error', 'SubCategory deleted successfully.');
+
+            return redirect()->route('subcategory.index')->with('success', 'Subcategory deleted successfully.');
         } catch (\Exception $e) {
             // Handle the exception and show error message
-            return redirect()->back()->with('error', 'Failed to delete subcategory');
+            return redirect()->back()->with('error', 'Failed to delete subcategory. ' . $e->getMessage());
         }
     }
 }

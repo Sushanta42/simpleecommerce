@@ -34,6 +34,15 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="main_category_id">Category</label>
+                            <select id="main_category_id" class="form-control" name="main_category_id">
+                                @foreach ($maincategories as $item)
+                                    <option value="{{ $item->id }}"
+                                        @if ($category->main_category_id == $item->id) selected @endif>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="image">Upload Image</label>
                             <input id="image" class="form-control-file" type="file" name="image">
                             @error('image')

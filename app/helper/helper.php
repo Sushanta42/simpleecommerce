@@ -1,5 +1,15 @@
 <?php
 
+function uploadMainImage($request, $object, $fileName)
+{
+    if ($request->hasFile('image')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/maincategory", $newName);
+        $object->image = "images/maincategory/$newName";
+    }
+}
+
 function uploadImage($request, $object, $fileName)
 {
     if ($request->hasFile('image')) {
@@ -67,5 +77,45 @@ function uploadCarouselImage($request, $object, $fileName)
         $newName = time() . "." . $file->getClientOriginalExtension();
         $file->move("images/carousel", $newName);
         $object->image = "images/carousel/$newName";
+    }
+}
+
+function uploadImageCitizen($request, $object, $fileName)
+{
+    if ($request->hasFile('image_citizen')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/citizenship", $newName);
+        $object->image_citizen = "images/citizenship/$newName";
+    }
+}
+
+function uploadImageFront($request, $object, $fileName)
+{
+    if ($request->hasFile('image_front')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/frontbluebook", $newName);
+        $object->image_front = "images/frontbluebook/$newName";
+    }
+}
+
+function uploadImageMain($request, $object, $fileName)
+{
+    if ($request->hasFile('image')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/bluebook", $newName);
+        $object->image = "images/bluebook/$newName";
+    }
+}
+
+function uploadYourImage($request, $object, $fileName)
+{
+    if ($request->hasFile('image')) {
+        $file = $request->$fileName;
+        $newName = time() . "." . $file->getClientOriginalExtension();
+        $file->move("images/upload", $newName);
+        $object->image = "images/upload/$newName";
     }
 }

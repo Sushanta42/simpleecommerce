@@ -95,7 +95,7 @@ class MilestoneController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|unique:milestones,name|max:255', // Add validation rules for name field
+            'name' => 'required|max:255', // Add validation rules for name field
             'goal' => 'required|numeric',
             'duration' => 'required',
             'plan' => 'required',

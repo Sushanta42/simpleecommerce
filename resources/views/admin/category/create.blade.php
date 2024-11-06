@@ -31,6 +31,18 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="main_category_id">Main Category</label>
+                            <select id="main_category_id" class="form-control" name="main_category_id">
+                                <option value="">Select Main-Category</option>
+                                @foreach ($maincategories as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('main_category_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
                             <label for="image">Upload Image</label>
                             <input id="image" class="form-control-file" type="file" name="image">
                             @error('image')

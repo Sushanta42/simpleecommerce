@@ -72,6 +72,13 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input id="password" class="form-control" type="password" name="password">
+                            @error('password')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         <button type="button" class="btn btn-primary btn-md" data-toggle="modal"
                             data-target="#editModal">Update Record</button>

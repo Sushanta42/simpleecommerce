@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\MainCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
@@ -17,11 +18,13 @@ class CategoryController extends Controller
 
     public function index(Request $request)
     {
-        $search = $request->input('search');
-        $categories = Category::query()
-            ->with('subcategories') // Add this line to eager load the 'subcategories' relationship
-            ->where('name', 'LIKE', "%{$search}%")
-            ->paginate(5);
+        // $search = $request->input('search');
+        // $categories = Category::query()
+        //     ->with('subcategories') // Add this line to eager load the 'subcategories' relationship
+        //     ->where('name', 'LIKE', "%{$search}%")
+        //     ->paginate(5);
+        // return view('admin.category.index', compact('categories'));
+        $categories = Category::with('subcategories')->get();
         return view('admin.category.index', compact('categories'));
     }
 
@@ -32,7 +35,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin.category.create');
+        $maincategories = MainCategory::all();
+        return view('admin.category.create', compact('maincategories'));
     }
 
     /**
@@ -46,6 +50,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|max:255', // Add validation rules for name field
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
+            'main_category_id' => 'required',
         ], [
             'name.required' => 'The category name field is required.', // Custom error message for name field
             'image.required' => 'The image field is required.', // Custom error message for image field
@@ -58,6 +63,7 @@ class CategoryController extends Controller
             $category = new Category();
             $category->name = $request->name;
             $category->slug = Str::slug($request->name);
+            $category->main_category_id = $request->main_category_id;
 
             //Image Upload Code
 
@@ -87,7 +93,8 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $category = Category::find($id);
-        return view('admin.category.edit', compact('category'));
+        $maincategories = MainCategory::all();
+        return view('admin.category.edit', compact('category', 'maincategories'));
     }
 
     /**
@@ -108,6 +115,7 @@ class CategoryController extends Controller
             $category = Category::find($id);
             $category->name = $request->name;
             $category->slug = Str::slug($request->name);
+            $category->main_category_id = $request->main_category_id;
 
             //Image Upload Code
 
@@ -125,19 +133,42 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy(string $id)
+    // {
+    //     try {
+    //         $category = Category::findOrFail($id);
+    //         $file = public_path($category->image);
+    //         if(file_exists($file)){
+    //             unlink($file);
+    //         }
+    //         $category->delete();
+    //         return redirect()->route('category.index')->with('error', 'Category deleted successfully.');
+    //     } catch (\Exception $e) {
+    //         // Handle the exception and show error message
+    //         return redirect()->back()->with('error', 'Failed to delete category due to its relation in sub category');
+    //     }
+    // }
     public function destroy(string $id)
     {
         try {
             $category = Category::findOrFail($id);
+
+            // Check if the category has subcategories
+            if ($category->subcategories()->exists()) {
+                return redirect()->back()->with('error', 'Failed to delete category due to its relation in sub categories');
+            }
+            // Delete the category first
+            $category->delete();
+            // Get the file path and delete the image only if category is deleted
             $file = public_path($category->image);
-            if(file_exists($file)){
+            // Delete the image file only if category deletion was successful
+            if (file_exists($file)) {
                 unlink($file);
             }
-            $category->delete();
-            return redirect()->route('category.index')->with('error', 'Category deleted successfully.');
+            return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
         } catch (\Exception $e) {
             // Handle the exception and show error message
-            return redirect()->back()->with('error', 'Failed to delete category due to its relation in sub category');
+            return redirect()->back()->with('error', 'Failed to delete category. ' . $e->getMessage());
         }
     }
 }

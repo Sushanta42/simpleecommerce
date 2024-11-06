@@ -60,7 +60,7 @@
                                     </td>
                                     <td class="border border-1">{{ $item->name }}</td>
                                     <td class="border border-1"><span
-                                            class="badge badge-light">{{ $item->sub_category->name }}</span></td>
+                                            class="badge badge-light">{{ $item->sub_category->name ?? "N/A" }}</span></td>
                                     <td class="border border-1">{{ $item->price }}</td>
                                     <td class="border border-1">{{ $item->sale_price }}</td>
                                     <td class="border border-1">{{ $item->availability }}</td>

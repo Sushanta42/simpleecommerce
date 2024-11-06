@@ -1,12 +1,15 @@
 <?php
 
 use App\Http\Controllers\Admin\AboutUsController;
+use App\Http\Controllers\Admin\BillbookController;
 use App\Http\Controllers\Admin\CacheController;
 use App\Http\Controllers\Admin\CarouselController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CommonAddressController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\FaqController;
+use App\Http\Controllers\Admin\ImageMediaController;
+use App\Http\Controllers\Admin\MainCategoryController;
 use App\Http\Controllers\Admin\MilestoneController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PrivacyPolicyController;
@@ -20,6 +23,7 @@ use App\Http\Controllers\Admin\UserFamilyController;
 use App\Http\Controllers\Admin\UserMilestoneController;
 use App\Http\Controllers\Admin\UserSubscriptionController;
 use App\Http\Controllers\Admin\VendorController;
+use App\Http\Controllers\CustomerBillbookController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserProductController;
 use App\Http\Controllers\Vendor\ProductController;
@@ -52,6 +56,16 @@ Route::get('/termsandconditionsmartgau', function () {
     return view('term', compact('termCondition'));
 });
 
+Route::get('/deletesmartgau', function () {
+    return view('deleteuser');
+});
+
+Route::resource('bluebookrenew', CustomerBillbookController::class);
+
+Route::get('/bluebookrenewtnc', function () {
+    return view('bluebookrenewtnc');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -75,6 +89,7 @@ Route::middleware('auth:admin')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::resource('maincategory', MainCategoryController::class);
     Route::resource('category', CategoryController::class);
     Route::resource('subcategory', SubCategoryController::class);
     Route::resource('order', OrderController::class);
@@ -92,6 +107,9 @@ Route::middleware('auth:admin')->group(function () {
     Route::resource('usercoupon', UserCouponController::class);
     Route::resource('milestone', MilestoneController::class);
     Route::resource('usermilestone', UserMilestoneController::class);
+
+    Route::resource('imagemedia', ImageMediaController::class);
+    Route::resource('billbook', BillbookController::class);
 
     Route::resource('privacypolicy', PrivacyPolicyController::class);
     Route::resource('faqs', FaqController::class);
@@ -116,6 +134,8 @@ Route::middleware('auth:vendor')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('vendor/product', ProductController::class);
+    Route::delete('/vendor/product/media/delete/{media}', 'App\Http\Controllers\Vendor\ProductController@deleteMedia')->name('product.media.delete');
+
 });
 
 require __DIR__ . '/vendorauth.php';

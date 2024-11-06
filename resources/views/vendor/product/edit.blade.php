@@ -41,6 +41,33 @@
                             @enderror
                         </div>
                         <div class="form-group">
+                            <label for="category_id">Category</label>
+                            <select id="category_id" class="form-control" name="category_id">
+                                <option value="">Select Categories</option>
+                                @foreach ($categories as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ $product->category_id == $item->id ? 'selected' : '' }}>
+                                        {{ $item->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="subcategory_id">Sub Category</label>
+                            <select id="subcategory_id" class="form-control" name="subcategory_id">
+                                <option value="">Select SubCategories</option>
+                                <!-- Subcategories will be populated dynamically using JavaScript -->
+                            </select>
+                            @error('subcategory_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+
+                        {{-- <div class="form-group">
                             <label for="subcategory_id">Sub Category</label>
                             <select id="subcategory_id" class="form-control" name="subcategory_id">
                                 @foreach ($subcategories as $item)
@@ -48,7 +75,7 @@
                                         @if ($product->sub_category_id == $item->id) selected @endif>{{ $item->name }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="form-group">
                             <label for="price">Price (Rs)</label>
                             <input id="price" class="form-control" type="number" name="price"
@@ -67,9 +94,8 @@
                         </div>
                         <div class="form-group">
                             <label for="discount_percent">Discount Percent (%)</label>
-                            <input id="discount_percent" class="form-control" type="number"
-                                name="discount_percent" oninput="calculate()"
-                                value="{{ $product->discount_percent ?? 0 }}">
+                            <input id="discount_percent" class="form-control" type="number" name="discount_percent"
+                                oninput="calculate()" value="{{ $product->discount_percent ?? 0 }}">
                             @error('discount_percent')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -120,6 +146,37 @@
                                 <img src="{{ asset($product->image) }}" width="120" alt="">
                             </div>
                         </div>
+                        <!-- Display existing media -->
+                        <div class="form-group">
+                            <label>Existing Media:</label>
+                            <div class="row">
+                                @foreach ($product->media as $media)
+                                    <div class="col-md-3 mb-3">
+                                        @if ($media->media_type == 'image')
+                                            <img src="{{ asset($media->file_path) }}" class="img-fluid"
+                                                alt="Product Image">
+                                        @elseif($media->media_type == 'video')
+                                            <video width="100%" controls>
+                                                <source src="{{ asset($media->file_path) }}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        @endif
+                                        <br>
+                                        <button type="button" class="btn btn-danger btn-sm mt-2"
+                                            onclick="deleteMedia({{ $media->id }})">Delete</button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Update media section -->
+                        <div class="form-group">
+                            <label for="media">Upload Additional Media (Optional)</label>
+                            <input id="media" class="form-control-file" type="file" name="media[]" multiple>
+                            @error('media.*')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary btn-md">Update Record</button>
                     </form>
                 </div>
@@ -145,5 +202,72 @@
 
     // Call the function to enable the "label" field
     enableLabelField();
+</script>
+
+<script>
+    // Function to update subcategories based on the selected category
+    function updateSubcategories() {
+        var categoryId = document.getElementById('category_id').value;
+        var subcategorySelect = document.getElementById('subcategory_id');
+        subcategorySelect.innerHTML = ''; // Clear existing options
+
+        // Populate subcategories based on the selected category
+        @foreach ($categories as $item)
+            if (categoryId == {{ $item->id }}) {
+                @foreach ($item->subcategories as $subcategory)
+                    var option = document.createElement('option');
+                    option.value = {{ $subcategory->id }};
+                    option.text = '{{ $subcategory->name }}';
+                    subcategorySelect.add(option);
+                @endforeach
+            }
+        @endforeach
+
+        // Check if the product has a selected subcategory and set it as selected
+        var productSubcategoryId = {{ $product->sub_category_id ?? 'null' }};
+        if (productSubcategoryId) {
+            var selectedOption = subcategorySelect.querySelector('option[value="' + productSubcategoryId + '"]');
+            if (selectedOption) {
+                selectedOption.selected = true;
+            }
+        }
+    }
+
+    // Attach the updateSubcategories function to the change event of the category dropdown
+    document.getElementById('category_id').addEventListener('change', updateSubcategories);
+
+    // Trigger the function on page load if there's a selected category (for editing)
+    window.onload = function() {
+        updateSubcategories();
+    };
+</script>
+
+<script>
+    function deleteMedia(mediaId) {
+    if (confirm('Are you sure you want to delete this media?')) {
+        // AJAX request to delete media
+        $.ajax({
+            url: '/vendor/product/media/delete/' + mediaId,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    alert('Media deleted successfully');
+                    // Optionally, remove the media element from the DOM
+                    location.reload();
+                } else {
+                    alert(response.error);
+                }
+            },
+            error: function(xhr) {
+                alert('Failed to delete media');
+            }
+        });
+    }
+}
+
 </script>
 

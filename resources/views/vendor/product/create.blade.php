@@ -39,13 +39,23 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="subcategory_id">Sub Category</label>
-                            <select id="subcategory_id" class="form-control" name="subcategory_id"
-                                value="{{ old('subcategory_id') }}">
-                                <option value="">Select SubCategories</option>
-                                @foreach ($subcategories as $item)
+                            <label for="category_id">Category</label>
+                            <select id="category_id" class="form-control" name="category_id">
+                                <option value="">Select Categories</option>
+                                @foreach ($categories as $item)
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
+                            </select>
+                            @error('category_id')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subcategory_id">Sub Category</label>
+                            <select id="subcategory_id" class="form-control" name="subcategory_id">
+                                <option value="">Select SubCategories</option>
+                                <!-- Subcategories will be populated dynamically using JavaScript -->
                             </select>
                             @error('subcategory_id')
                                 <div class="text-danger">{{ $message }}</div>
@@ -69,9 +79,8 @@
                         </div>
                         <div class="form-group">
                             <label for="discount_percent">Discount Percent (%)</label>
-                            <input id="discount_percent" class="form-control" type="number"
-                                name="discount_percent" oninput="calculate()"
-                                value="{{ old('discount_percent') ?? 0 }}">
+                            <input id="discount_percent" class="form-control" type="number" name="discount_percent"
+                                oninput="calculate()" value="{{ old('discount_percent') ?? 0 }}">
                             @error('discount_percent')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
@@ -100,10 +109,52 @@
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="media">Upload Media (Images or Videos)</label>
+                            <input id="media" class="form-control-file" type="file" name="media[]" multiple>
+                            @error('media')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="media">Upload Media (Images or Videos) (Optional)</label>
+                            <input id="media" class="form-control-file" type="file" name="media[]" multiple>
+                            @error('media')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <button type="submit" class="btn btn-primary btn-md">Save Record</button>
                     </form>
                 </div>
             </div>
+            <script>
+                // Function to update subcategories based on the selected category
+                function updateSubcategories() {
+                    var categoryId = document.getElementById('category_id').value;
+                    var subcategorySelect = document.getElementById('subcategory_id');
+                    subcategorySelect.innerHTML = ''; // Clear existing options
+
+                    // Populate subcategories based on the selected category
+                    @foreach ($categories as $item)
+                        if (categoryId == {{ $item->id }}) {
+                            @foreach ($item->subcategories as $subcategory)
+                                var option = document.createElement('option');
+                                option.value = {{ $subcategory->id }};
+                                option.text = '{{ $subcategory->name }}';
+                                subcategorySelect.add(option);
+                            @endforeach
+                        }
+                    @endforeach
+                }
+
+                // Attach the updateSubcategories function to the change event of the category dropdown
+                document.getElementById('category_id').addEventListener('change', updateSubcategories);
+
+                // Trigger the function on page load if there's a selected category (for editing)
+                window.onload = function() {
+                    updateSubcategories();
+                };
+            </script>
         </div>
     </section>
 </x-vendor-layout>

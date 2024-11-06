@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CouponApiController;
 use App\Http\Controllers\Api\LegalApiController;
 use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\Api\SubscriptionApiController;
+use App\Http\Controllers\Api\UploadImageApiController;
 use App\Http\Controllers\Api\UserApiController;
 use App\Http\Controllers\Api\UserMilestoneApiController;
 use Illuminate\Http\Request;
@@ -42,8 +43,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('order', [ProductApiController::class, 'order']);
     Route::get('order', [ProductApiController::class, 'getOrder']);
 
+    Route::post('uploadimage', [UploadImageApiController::class, 'uploadImage']);
+
 
     Route::get('categories/user', [CategoryApiController::class, 'getCategoriesByCommonAddress']);
+    Route::get('maincategories/user', [CategoryApiController::class, 'getMainCategoriesByCommonAddress']);
     Route::get('products/user', [ProductApiController::class, 'getProductsByCommonAddress']);
     Route::get('subcategories/user', [CategoryApiController::class, 'getSubCategoriesByCommonAddress']);
     Route::get('category/user/{id}', [CategoryApiController::class, 'getCategoryByCommonAddress']);

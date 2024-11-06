@@ -103,6 +103,10 @@ class UserController extends Controller
             $user->dob = $request->dob;
             $user->common_address_id = $request->common_address_id;
             $user->description = $request->description;
+            // Check if a new password is provided, if not, retain the old password
+            if (!empty($request->password)) {
+                $user->password = bcrypt($request->password);
+            }
 
             $user->update();
             Session::flash('success', 'User updated successfully!'); // Add success message to flash session

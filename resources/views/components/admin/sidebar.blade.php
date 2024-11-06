@@ -15,6 +15,12 @@
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
                         data-feather="grid"></i><span>Category</span></a>
                 <ul class="dropdown-menu">
+                    <li><a class="nav-link" href="{{ route('maincategory.index') }}">
+                            Main Category
+                        </a>
+                    </li>
+                </ul>
+                <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{{ route('category.index') }}">
                             Category
                         </a>
@@ -41,8 +47,12 @@
                         data-feather="truck"></i><span>Vendors</span></a>
             </li>
             <li class="dropdown {{ request()->is('userfamily*') ? 'active' : '' }}">
-                <a href="{{ route('userfamily.index') }}" class="nav-link"><i
-                        data-feather="users"></i><span>Users Family</span></a>
+                <a href="{{ route('userfamily.index') }}" class="nav-link"><i data-feather="users"></i><span>Users
+                        Family</span></a>
+            </li>
+            <li class="dropdown {{ request()->is('imagemedia*') ? 'active' : '' }}">
+                <a href="{{ route('imagemedia.index') }}" class="nav-link"><i
+                        data-feather="download-cloud"></i><span>Upload Image</span></a>
             </li>
             {{-- <li class="dropdown">
                 <a href="#" class="menu-toggle nav-link has-dropdown"><i
@@ -56,6 +66,10 @@
             <li class="dropdown {{ request()->is('order*') ? 'active' : '' }}">
                 <a href="{{ route('order.index') }}" class="nav-link"><i
                         data-feather="shopping-cart"></i><span>Order</span></a>
+            </li>
+            <li class="dropdown {{ request()->is('billbook*') ? 'active' : '' }}">
+                <a href="{{ route('billbook.index') }}" class="nav-link"><i
+                        data-feather="inbox"></i><span>BlueBook</span></a>
             </li>
             <li class="menu-header">Addresses</li>
             <li class="dropdown {{ request()->is('commonaddress*') ? 'active' : '' }}">

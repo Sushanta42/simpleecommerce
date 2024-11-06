@@ -75,7 +75,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="longitude">Longitude (Optional)</label>
+                            <label for="longitude">Longitude (Optional/In decimal)</label>
                             <input id="longitude" class="form-control" type="text" name="longitude"
                                 value="{{ old('longitude') }}">
                             @error('longitude')
@@ -83,7 +83,7 @@
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="latitude">Latitude (Optional)</label>
+                            <label for="latitude">Latitude (Optional/In decimal)</label>
                             <input id="latitude" class="form-control" type="text" name="latitude"
                                 value="{{ old('latitude') }}">
                             @error('latitude')

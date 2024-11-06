@@ -19,6 +19,16 @@ class Category extends Model
         return $this->hasMany(SubCategory::class);
     }
 
+    // /**
+    //  * Get all of the products for the Category
+    //  *
+    //  * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    //  */
+    // public function products()
+    // {
+    //     return $this->hasManyThrough(Product::class, SubCategory::class);
+    // }
+
     /**
      * Get all of the products for the Category
      *
@@ -26,6 +36,16 @@ class Category extends Model
      */
     public function products()
     {
-        return $this->hasManyThrough(Product::class, SubCategory::class);
+        return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Get the maincategory that owns the Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function mainCategory()
+    {
+        return $this->belongsTo(MainCategory::class);
     }
 }

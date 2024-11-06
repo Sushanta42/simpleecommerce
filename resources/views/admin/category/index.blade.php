@@ -22,7 +22,7 @@
                     <h6>Categories</h6>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3">
+                    {{-- <div class="row mb-3">
                         <div class="col-md-6">
                             <form action="{{ route('category.index') }}" method="get">
                                 <div class="input-group">
@@ -35,8 +35,8 @@
                                 </div>
                             </form>
                         </div>
-                    </div>
-                    <table class="table">
+                    </div> --}}
+                    <table class="table" id="save-stage" style="width:100%;">
                         <thead>
                             <tr class="bg-secondary">
                                 <th class="border border-1">SN</th>
@@ -55,10 +55,26 @@
                                 <tr>
                                     <td class="border border-1">{{ ++$index }}</td>
                                     <td class="border border-1">{{ $item->name }}</td>
-                                    <td class="border border-1">
+                                    {{-- <td class="border border-1">
                                         <!-- Displaying the image using the <img> tag -->
                                         <img src="{{ asset($item->image) }}" alt="Category Image" width="60"
                                             height="60">
+                                    </td> --}}
+                                    <td class="border border-1">
+                                        <a href="" data-toggle="modal"
+                                            data-target="#basicModal{{ $item->id }}"> <img
+                                                src="{{ asset($item->image) }}" width="60" alt=""></a>
+                                        <div class="modal fade" id="basicModal{{ $item->id }}" tabindex="-1"
+                                            role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div>
+                                                        <img src="{{ asset($item->image) }}" class="img-fluid"
+                                                            alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="border border-1">
                                         @foreach ($item->subcategories as $subcategory)
@@ -122,7 +138,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $categories->links('pagination::bootstrap-5') }}
+                    {{-- {{ $categories->links('pagination::bootstrap-5') }} --}}
                 </div>
             </div>
         </div>

@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Vendor;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductMedia;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductController extends Controller
 {
@@ -27,7 +31,8 @@ class ProductController extends Controller
     public function create()
     {
         $subcategories = SubCategory::all();
-        return view('vendor.product.create', compact('subcategories'));
+        $categories = Category::all();
+        return view('vendor.product.create', compact('subcategories', 'categories'));
     }
 
     /**
@@ -39,15 +44,16 @@ class ProductController extends Controller
             'name' => 'required|max:255', // Add validation rules for name field
             'price' => 'required|numeric',
             'sale_price' => 'required|numeric|lte:price',
-            'subcategory_id' => 'required',
+            'category_id' => 'required',
             'discount_percent' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
+            'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240', // 10MB max for media files
         ], [
             'name.required' => 'The Product name field is required.', // Custom error message for name field
             'price.required' => 'The price field is required.', // Custom error message for price field
             'sale_price.required' => 'The Selling price field is required.', // Custom error message for price field
             'sale_price.lte' => 'The Selling price must be equal to or less than the regular price.', // Custom error message for sale_price validation
-            'subcategory_id.required' => 'The SubCategory field is required.', // Custom error message for price field
+            'category_id.required' => 'The Category field is required.', // Custom error message for price field
             'discount_percent.required' => 'The discount percent field is required.', // Custom error message for price field
             'image.required' => 'The image field is required.', // Custom error message for image field
             'image.image' => 'The file must be an image.', // Custom error message for image file type
@@ -63,6 +69,7 @@ class ProductController extends Controller
             $product->description = $request->description;
             $product->availability = $request->availability;
             $product->slug = Str::slug($request->name) . '-' . Auth::user()->id;
+            $product->category_id = $request->category_id;
             $product->sub_category_id = $request->subcategory_id;
             $product->vendor_id = Auth::user()->id;
 
@@ -71,6 +78,21 @@ class ProductController extends Controller
             uploadProductImage($request, $product, 'image');
 
             $product->save();
+            // Handle additional media files
+            if ($request->hasFile('media')) {
+                foreach ($request->file('media') as $file) {
+                    $newName = time() . '_' . $file->getClientOriginalName();
+                    $file->move("images/media", $newName);
+                    $filePath = "images/media/$newName";
+                    $fileType = $file->getClientOriginalExtension() == 'mp4' ? 'video' : 'image';
+
+                    $media = new ProductMedia();
+                    $media->product_id = $product->id;
+                    $media->file_path = $filePath;
+                    $media->media_type = $fileType;
+                    $media->save();
+                }
+            }
             Session::flash('success', 'Product added successfully!'); // Add success message to flash session
             return redirect()->route('product.index');
         } catch (\Exception $e) {
@@ -85,8 +107,9 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::find($id);
+        $categories = Category::all();
         $subcategories = SubCategory::all();
-        return view('vendor.product.view', compact('product', 'subcategories'));
+        return view('vendor.product.view', compact('product', 'subcategories', 'categories'));
     }
 
     /**
@@ -95,8 +118,9 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::find($id);
+        $categories = Category::all();
         $subcategories = SubCategory::all();
-        return view('vendor.product.edit', compact('product', 'subcategories'));
+        return view('vendor.product.edit', compact('product', 'subcategories', 'categories'));
     }
 
     /**
@@ -110,6 +134,7 @@ class ProductController extends Controller
             'sale_price' => 'required|numeric|lte:price',
             'discount_percent' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Add validation rules for image field
+            'media.*' => 'nullable|file|mimes:jpeg,png,jpg,gif,mp4,mov,avi|max:10240', // 10MB max for media files
         ], [
             'name.required' => 'The Product name field is required.', // Custom error message for name field
             'price.required' => 'The price field is required.', // Custom error message for price field
@@ -133,6 +158,7 @@ class ProductController extends Controller
             }
             $product->slug = Str::slug($request->name) . '-' . Auth::user()->id;
             $product->sub_category_id = $request->subcategory_id;
+            $product->category_id = $request->category_id;
             $product->vendor_id = Auth::user()->id;
 
             //Image Upload Code
@@ -140,6 +166,21 @@ class ProductController extends Controller
             uploadProductImage($request, $product, 'image');
 
             $product->update();
+            // Handle additional media files
+            if ($request->hasFile('media')) {
+                foreach ($request->file('media') as $file) {
+                    $newName = time() . '.' . $file->getClientOriginalExtension();
+                    $file->move("images/media", $newName);
+                    $filePath = "images/media/$newName";
+                    $fileType = $file->getClientOriginalExtension() == 'mp4' ? 'video' : 'image';
+
+                    $media = new ProductMedia();
+                    $media->product_id = $product->id;
+                    $media->file_path = $filePath;
+                    $media->media_type = $fileType;
+                    $media->save();
+                }
+            }
             Session::flash('success', 'Product update successfully!'); // Add success message to flash session
             return redirect()->route('product.index');
         } catch (\Exception $e) {
@@ -155,15 +196,39 @@ class ProductController extends Controller
     {
         try {
             $product = Product::findOrFail($id);
+            $product->delete();
             $file = public_path($product->image);
             if (file_exists($file)) {
                 unlink($file);
             }
-            $product->delete();
+            // Delete associated media files (if any)
+            $mediaFiles = ProductMedia::where('product_id', $product->id)->get();
+            foreach ($mediaFiles as $media) {
+                $mediaFiles = public_path($media->file_path);
+                if (file_exists($mediaFiles)) {
+                    unlink($mediaFiles);
+                }
+                $media->delete();
+            }
             return redirect()->route('product.index')->with('error', 'Product deleted successfully.');
         } catch (\Exception $e) {
             // Handle the exception and show error message
             return redirect()->back()->with('error', 'Failed to delete product');
+        }
+    }
+    public function deleteMedia(ProductMedia $media)
+    {
+        try {
+            // Delete media file from storage
+            $filePath = public_path($media->file_path);
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+            // Delete media record from database
+            $media->delete();
+            return response()->json(['success' => 'Media deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to delete media.']);
         }
     }
 }

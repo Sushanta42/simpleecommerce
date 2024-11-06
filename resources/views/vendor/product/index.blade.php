@@ -12,7 +12,7 @@
                 <script>
                     setTimeout(function() {
                         $('.alert').alert('close');
-                    }, 3000); // Close the alert after 3 seconds (3000 milliseconds)
+                    }, 8000); // Close the alert after 3 seconds (3000 milliseconds)
                 </script>
             @endif
 
@@ -28,6 +28,7 @@
                                 <th class="border border-1">SN</th>
                                 <th class="border border-1">Image</th>
                                 <th class="border border-1">Name</th>
+                                <th class="border border-1">Category</th>
                                 <th class="border border-1">Sub Category</th>
                                 <th class="border border-1">Price (Rs.)</th>
                                 <th class="border border-1">Selling Price (Rs.)</th>
@@ -60,7 +61,11 @@
                                     </td>
                                     <td class="border border-1">{{ $item->name }}</td>
                                     <td class="border border-1"><span
-                                            class="badge badge-light">{{ $item->sub_category->name }}</span></td>
+                                            class="badge badge-light">{{ $item->category->name}}</span>
+                                    </td>
+                                    <td class="border border-1"><span
+                                            class="badge badge-light">{{ $item->sub_category->name ?? 'N/A' }}</span>
+                                    </td>
                                     <td class="border border-1">{{ $item->price }}</td>
                                     <td class="border border-1">{{ $item->sale_price }}</td>
                                     <td class="border border-1">{{ $item->availability }}</td>
@@ -103,8 +108,8 @@
                                                         <div class="modal-body">
                                                             <p>Are you sure you want to delete this product?</p>
                                                             <p><strong>Product Name:</strong> {{ $item->name }}</p>
-                                                            <p><strong>Sub Category: </strong>
-                                                                {{ $item->sub_category->name }}</p>
+                                                            <p><strong> Category: </strong>
+                                                                {{ $item->category->name }}</p>
                                                             <p><strong>Image:</strong> <img
                                                                     src="{{ asset($item->image) }}" class="img-fluid"
                                                                     alt="SubCategoryimg" height="70", width="70">
